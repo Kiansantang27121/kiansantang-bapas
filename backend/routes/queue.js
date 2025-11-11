@@ -495,11 +495,11 @@ router.post('/reset', authenticateToken, requireOperator, (req, res) => {
 // Reset today's queues only (Admin only)
 router.post('/reset/today', authenticateToken, requireOperator, (req, res) => {
   try {
-    // Get count before reset
-    const beforeCount = db.prepare('SELECT COUNT(*) as count FROM queue WHERE DATE(created_at) = CURRENT_DATE').get();
+    // Get count before reset (SQLite syntax)
+    const beforeCount = db.prepare("SELECT COUNT(*) as count FROM queue WHERE DATE(created_at) = DATE('now')").get();
     
     // Get queue IDs to delete workflow records
-    const queueIds = db.prepare('SELECT id FROM queue WHERE DATE(created_at) = CURRENT_DATE').all();
+    const queueIds = db.prepare("SELECT id FROM queue WHERE DATE(created_at) = DATE('now')").all();
     
     // Delete workflow records for today's queues
     if (queueIds.length > 0) {
@@ -508,7 +508,7 @@ router.post('/reset/today', authenticateToken, requireOperator, (req, res) => {
     }
     
     // Delete today's queues
-    db.prepare('DELETE FROM queue WHERE DATE(created_at) = CURRENT_DATE').run();
+    db.prepare("DELETE FROM queue WHERE DATE(created_at) = DATE('now')").run();
     
     console.log(`🗑️  Reset Today: Deleted ${beforeCount.count} queues from today`);
     
