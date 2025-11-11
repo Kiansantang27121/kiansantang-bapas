@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy KIANSANTANG - Railway + Vercel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        
+        .phase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .step {
+            background: #f7fafc;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.3em;
+        }
+        
+        .step-title {
+            color: #2d3748;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .step-content {
+            color: #4a5568;
+            line-height: 1.8;
+            margin-left: 60px;
+        }
+        
+        .code-box {
+            background: #2d3748;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-size: 0.95em;
+        }
+        
+        .url-box {
+            background: #e6fffa;
+            border: 2px solid #38b2ac;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            color: #234e52;
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #744210;
+        }
+        
+        .warning {
+            background: #fed7d7;
+            border-left: 5px solid #f56565;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background: #c6f6d5;
+            border-left: 5px solid #48bb78;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .info-box {
+            background: #bee3f8;
+            border-left: 5px solid #4299e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-warning {
+            background: #ed8936;
+        }
+        
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+        
+        .checklist {
+            list-style: none;
+            margin-left: 60px;
+        }
+        
+        .checklist li {
+            padding: 12px 0;
+            position: relative;
+            padding-left: 40px;
+            font-size: 1.05em;
+        }
+        
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-size: 1.6em;
+            color: #667eea;
+        }
+        
+        .env-var {
+            background: #fef3c7;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .cost-box {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .cost-box h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .cost-box p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Deploy KIANSANTANG</h1>
+        <p class="subtitle">Railway (Backend) + Vercel (Frontend) - 100% GRATIS!</p>
+        
+        <div class="cost-box">
+            <h3>💰 Total Biaya: Rp 0 / GRATIS!</h3>
+            <p>✅ Railway: $5 credit gratis/bulan</p>
+            <p>✅ Vercel: Unlimited gratis</p>
+            <p>✅ SSL otomatis</p>
+            <p>✅ Custom domain gratis</p>
+        </div>
+        
+        <!-- PHASE 1: RAILWAY BACKEND -->
+        <div class="phase">
+            📦 PHASE 1: Deploy Backend di Railway
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                Buat Akun Railway
+            </div>
+            <div class="step-content">
+                <p>Klik tombol di bawah untuk sign up Railway:</p>
+                <a href="https://railway.app" target="_blank" class="btn">
+                    🚂 Buka Railway.app
+                </a>
+                <div class="info-box">
+                    <strong>📝 Langkah:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Klik "Login with GitHub"</li>
+                        <li>Authorize Railway</li>
+                        <li>✅ Dapat $5 credit gratis otomatis!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                Deploy Backend dari GitHub
+            </div>
+            <div class="step-content">
+                <p><strong>Di Railway Dashboard:</strong></p>
+                <ol style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                    <li>Klik <span class="highlight">New Project</span></li>
+                    <li>Pilih <span class="highlight">Deploy from GitHub repo</span></li>
+                    <li>Pilih repository: <span class="highlight">kiansantang-bapas</span></li>
+                    <li>Railway akan otomatis detect dan deploy!</li>
+                </ol>
+                
+                <div class="warning">
+                    <strong>⚠️ Penting:</strong> Railway akan otomatis detect Node.js project dan install dependencies.
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">3</span>
+                Konfigurasi Environment Variables
+            </div>
+            <div class="step-content">
+                <p><strong>Di Railway Project → Variables:</strong></p>
+                
+                <div class="env-var">NODE_ENV=production</div>
+                <div class="env-var">PORT=3000</div>
+                <div class="env-var">JWT_SECRET=kiansantang-bapas-secret-2024-change-this</div>
+                
+                <div class="info-box">
+                    <strong>💡 Tips:</strong> Ganti JWT_SECRET dengan string random yang aman!
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">4</span>
+                Generate Domain Backend
+            </div>
+            <div class="step-content">
+                <p><strong>Di Railway Project → Settings → Networking:</strong></p>
+                <ol style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                    <li>Klik <span class="highlight">Generate Domain</span></li>
+                    <li>Copy URL yang muncul (contoh: kiansantang-backend.up.railway.app)</li>
+                    <li>✅ Backend sudah online!</li>
+                </ol>
+                
+                <div class="success">
+                    <strong>✅ Test Backend:</strong><br>
+                    Buka: <code>https://[your-domain].up.railway.app/api/health</code><br>
+                    Harus muncul: <code>{"status":"ok"}</code>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PHASE 2: VERCEL FRONTEND -->
+        <div class="phase">
+            🌐 PHASE 2: Deploy Frontend di Vercel
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">5</span>
+                Buat Akun Vercel
+            </div>
+            <div class="step-content">
+                <p>Klik tombol di bawah untuk sign up Vercel:</p>
+                <a href="https://vercel.com/signup" target="_blank" class="btn btn-success">
+                    ▲ Buka Vercel.com
+                </a>
+                <div class="info-box">
+                    <strong>📝 Langkah:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Klik "Continue with GitHub"</li>
+                        <li>Authorize Vercel</li>
+                        <li>✅ Akun siap!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">6</span>
+                Deploy Registration App
+            </div>
+            <div class="step-content">
+                <p><strong>Di Vercel Dashboard:</strong></p>
+                <ol style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                    <li>Klik <span class="highlight">Add New...</span> → <span class="highlight">Project</span></li>
+                    <li>Import repository: <span class="highlight">kiansantang-bapas</span></li>
+                    <li>Configure Project:
+                        <div class="code-box">
+Framework Preset: Vite
+Root Directory: registration-app
+Build Command: npm run build
+Output Directory: dist
+                        </div>
+                    </li>
+                    <li>Environment Variables:
+                        <div class="env-var">VITE_API_URL=https://[railway-domain].up.railway.app/api</div>
+                        <p style="margin-top: 10px;"><em>Ganti [railway-domain] dengan domain Railway Anda!</em></p>
+                    </li>
+                    <li>Klik <span class="highlight">Deploy</span></li>
+                </ol>
+                
+                <div class="success">
+                    <strong>✅ Selesai!</strong> Copy URL Vercel untuk Registration App
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">7</span>
+                Deploy Operator App
+            </div>
+            <div class="step-content">
+                <p><strong>Ulangi langkah yang sama:</strong></p>
+                <div class="code-box">
+Framework Preset: Vite
+Root Directory: operator-app
+Build Command: npm run build
+Output Directory: dist
+
+Environment Variables:
+VITE_API_URL=https://[railway-domain].up.railway.app/api
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">8</span>
+                Deploy Display App
+            </div>
+            <div class="step-content">
+                <div class="code-box">
+Framework Preset: Vite
+Root Directory: display-app
+Build Command: npm run build
+Output Directory: dist
+
+Environment Variables:
+VITE_API_URL=https://[railway-domain].up.railway.app/api
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">9</span>
+                Deploy Petugas App
+            </div>
+            <div class="step-content">
+                <div class="code-box">
+Framework Preset: Vite
+Root Directory: petugas-app
+Build Command: npm run build
+Output Directory: dist
+
+Environment Variables:
+VITE_API_URL=https://[railway-domain].up.railway.app/api
+                </div>
+            </div>
+        </div>
+        
+        <!-- PHASE 3: FINALISASI -->
+        <div class="phase">
+            ⚙️ PHASE 3: Finalisasi & Testing
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">10</span>
+                Update CORS di Backend
+            </div>
+            <div class="step-content">
+                <p><strong>Edit file di GitHub:</strong> <code>backend/server.js</code></p>
+                <div class="code-box">
+// Update bagian CORS (sekitar baris 42)
+app.use(cors({
+  origin: [
+    'https://[registration-app].vercel.app',
+    'https://[operator-app].vercel.app',
+    'https://[display-app].vercel.app',
+    'https://[petugas-app].vercel.app'
+  ],
+  credentials: true
+}));
+                </div>
+                <div class="info-box">
+                    <strong>💡 Tips:</strong> Ganti [app-name] dengan nama Vercel apps Anda!<br>
+                    Setelah commit & push, Railway akan auto-deploy ulang!
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">11</span>
+                Testing Aplikasi
+            </div>
+            <div class="step-content">
+                <p><strong>Test semua URL:</strong></p>
+                <div class="checklist">
+                    <li>Backend API: https://[railway].up.railway.app/api/health</li>
+                    <li>Registration: https://[app].vercel.app</li>
+                    <li>Operator: https://[app].vercel.app</li>
+                    <li>Display: https://[app].vercel.app</li>
+                    <li>Petugas: https://[app].vercel.app</li>
+                </div>
+                
+                <div class="success">
+                    <strong>✅ Test Fitur:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Login admin/petugas</li>
+                        <li>Buat antrian baru</li>
+                        <li>Panggil antrian</li>
+                        <li>Display real-time update</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #e2e8f0;">
+        
+        <h2 style="color: #2d3748; margin-bottom: 20px; text-align: center;">📋 Checklist Deployment</h2>
+        <ul class="checklist">
+            <li>Railway account created & $5 credit received</li>
+            <li>Backend deployed to Railway</li>
+            <li>Environment variables configured</li>
+            <li>Railway domain generated</li>
+            <li>Vercel account created</li>
+            <li>Registration app deployed</li>
+            <li>Operator app deployed</li>
+            <li>Display app deployed</li>
+            <li>Petugas app deployed</li>
+            <li>CORS updated in backend</li>
+            <li>All apps tested & working</li>
+        </ul>
+        
+        <div class="success" style="margin-top: 30px; text-align: center;">
+            <h3 style="margin-bottom: 15px;">🎉 KIANSANTANG ONLINE!</h3>
+            <p style="font-size: 1.1em;">Sistem sudah berjalan 24/7 secara GRATIS!</p>
+            <p style="margin-top: 10px;">✅ Auto-deploy dari GitHub</p>
+            <p>✅ SSL otomatis</p>
+            <p>✅ Monitoring gratis</p>
+            <p>✅ Backup otomatis</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://railway.app" target="_blank" class="btn">
+                🚂 Mulai Deploy Backend
+            </a>
+            <a href="https://vercel.com/signup" target="_blank" class="btn btn-success">
+                ▲ Mulai Deploy Frontend
+            </a>
+        </div>
+        
+        <div class="warning" style="margin-top: 30px;">
+            <strong>⚠️ Catatan Penting:</strong>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Simpan semua URL deployment Anda</li>
+                <li>Jangan share JWT_SECRET ke publik</li>
+                <li>Monitor usage di Railway dashboard</li>
+                <li>$5 credit Railway cukup untuk ~1 bulan usage normal</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
