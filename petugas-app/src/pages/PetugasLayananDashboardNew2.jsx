@@ -319,29 +319,32 @@ export default function PetugasLayananDashboardNew2() {
         </div>
       </div>
 
-      {/* Notifikasi: PK Sudah Siap - Panggil Klien */}
+      {/* Status: PK Sudah Masuk Ruangan & Klien Sudah Dipanggil Otomatis */}
       {readyToCallClient.length > 0 && (
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-2xl p-6 text-white animate-pulse">
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-2xl p-6 text-white">
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <Bell className="w-6 h-6" />
-            📢 PK Sudah Siap di Ruangan - Panggil Klien!
+            <CheckCircle className="w-6 h-6" />
+            ✅ Antrian Sedang Dilayani PK
           </h2>
+          <p className="text-green-100 mb-4">PK sudah masuk ruangan dan klien sudah dipanggil otomatis</p>
           <div className="space-y-3">
             {readyToCallClient.map((queue) => (
-              <div key={queue.id} className="bg-white/20 backdrop-blur-lg rounded-lg p-4 flex items-center justify-between">
-                <div>
-                  <p className="font-bold text-lg">Antrian: {queue.queue_number}</p>
-                  <p className="text-sm">Klien: {queue.client_name}</p>
-                  <p className="text-sm">PK: {queue.pk_name} ({queue.pk_jabatan})</p>
-                  <p className="text-sm">Ruangan: {getRoomName(queue.room_number)}</p>
+              <div key={queue.id} className="bg-white/20 backdrop-blur-lg rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="font-bold text-lg">Antrian: {queue.queue_number}</p>
+                    <p className="text-sm">Klien: {queue.client_name}</p>
+                    <p className="text-sm">PK: {queue.pk_name} ({queue.pk_jabatan})</p>
+                    <p className="text-sm">Ruangan: {queue.room_name || getRoomName(queue.room_number)}</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-white/30 px-4 py-2 rounded-lg">
+                      <CheckCircle className="w-8 h-8 mx-auto mb-1" />
+                      <p className="text-xs font-bold">Klien Dipanggil</p>
+                      <p className="text-xs">(Otomatis)</p>
+                    </div>
+                  </div>
                 </div>
-                <button
-                  onClick={() => handleCallClient(queue)}
-                  className="bg-white text-green-600 px-6 py-3 rounded-lg font-bold hover:bg-green-50 transition-all flex items-center gap-2"
-                >
-                  <Phone className="w-5 h-5" />
-                  Panggil Klien
-                </button>
               </div>
             ))}
           </div>
