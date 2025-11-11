@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Create GitHub Repository</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .step {
+            background: #f7fafc;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+        
+        .step-title {
+            color: #2d3748;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .step-content {
+            color: #4a5568;
+            line-height: 1.8;
+            margin-left: 55px;
+        }
+        
+        .code-box {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .warning {
+            background: #fed7d7;
+            border-left: 5px solid #f56565;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background: #c6f6d5;
+            border-left: 5px solid #48bb78;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #48bb78;
+        }
+        
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+        
+        .checklist {
+            list-style: none;
+            margin-left: 55px;
+        }
+        
+        .checklist li {
+            padding: 10px 0;
+            position: relative;
+            padding-left: 35px;
+        }
+        
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+        
+        .info-box {
+            background: #bee3f8;
+            border-left: 5px solid #4299e1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Panduan Create GitHub Repository</h1>
+        <p class="subtitle">Ikuti langkah-langkah berikut untuk membuat repository KIANSANTANG</p>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                Buka GitHub New Repository
+            </div>
+            <div class="step-content">
+                <p>Klik tombol di bawah untuk membuka halaman create repository:</p>
+                <a href="https://github.com/new" target="_blank" class="btn">
+                    🔗 Buka GitHub New Repository
+                </a>
+                <p style="margin-top: 15px;">Atau klik tombol <span class="highlight">+</span> di kanan atas GitHub → pilih <span class="highlight">New repository</span></p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                Isi Form Repository
+            </div>
+            <div class="step-content">
+                <p><strong>Repository name:</strong></p>
+                <div class="code-box">kiansantang-bapas</div>
+                
+                <p><strong>Description:</strong></p>
+                <div class="code-box">Sistem Antrian BAPAS Kelas I Bandung - KIANSANTANG</div>
+                
+                <div class="info-box">
+                    <strong>📝 Penting:</strong> Copy-paste text di atas ke form GitHub
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">3</span>
+                Pilih Visibility
+            </div>
+            <div class="step-content">
+                <p>Pilih <span class="highlight">Public</span> (untuk gratis unlimited)</p>
+                <div class="warning">
+                    <strong>⚠️ Jangan Centang Apapun!</strong><br>
+                    Jangan centang:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>❌ Add a README file</li>
+                        <li>❌ Add .gitignore</li>
+                        <li>❌ Choose a license</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">4</span>
+                Create Repository
+            </div>
+            <div class="step-content">
+                <p>Klik tombol hijau <span class="highlight">Create repository</span></p>
+                <div class="success">
+                    <strong>✅ Repository akan dibuat!</strong><br>
+                    Setelah dibuat, GitHub akan menampilkan halaman dengan instruksi.
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">5</span>
+                Push Code ke GitHub
+            </div>
+            <div class="step-content">
+                <p>Setelah repository dibuat, jalankan file ini:</p>
+                <div class="code-box">D:\kiansantang\bapas-bandung\PUSH-TO-GITHUB.bat</div>
+                <p style="margin-top: 15px;">Atau beritahu saya di chat, saya akan bantu push!</p>
+            </div>
+        </div>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #e2e8f0;">
+        
+        <h2 style="color: #2d3748; margin-bottom: 20px;">📋 Checklist</h2>
+        <ul class="checklist">
+            <li>Login ke GitHub (username: asiansantang-bapas)</li>
+            <li>Buka https://github.com/new</li>
+            <li>Repository name: kiansantang-bapas</li>
+            <li>Description: Sistem Antrian BAPAS Kelas I Bandung</li>
+            <li>Pilih Public</li>
+            <li>JANGAN centang apapun</li>
+            <li>Klik Create repository</li>
+            <li>Jalankan PUSH-TO-GITHUB.bat</li>
+        </ul>
+        
+        <div class="success" style="margin-top: 30px;">
+            <strong>🎉 Setelah Selesai:</strong><br>
+            Code akan ter-upload ke GitHub dan siap untuk deploy ke Railway + Vercel (gratis!)
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://github.com/new" target="_blank" class="btn btn-secondary">
+                🚀 Mulai Create Repository Sekarang!
+            </a>
+        </div>
+    </div>
+</body>
+</html>
