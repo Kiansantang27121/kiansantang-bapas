@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Operator Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    button.secondary {
+      background: #2196F3;
+    }
+    button.secondary:hover {
+      background: #0b7dda;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8f5e9;
+      border-left: 4px solid #4CAF50;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    .error {
+      background: #ffebee;
+      border-left-color: #f44336;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    label {
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Test Operator Login & Queue Creation</h1>
+    
+    <!-- Step 1: Login -->
+    <div class="section">
+      <h2>Step 1: Login as Operator</h2>
+      <label>Username:</label>
+      <input type="text" id="username" value="operator">
+      
+      <label>Password:</label>
+      <input type="password" id="password" value="operator123">
+      
+      <button onclick="login()">Login</button>
+      <div id="loginResult"></div>
+    </div>
+    
+    <!-- Step 2: Check Token -->
+    <div class="section">
+      <h2>Step 2: Check Token</h2>
+      <button class="secondary" onclick="checkToken()">Check Current Token</button>
+      <div id="tokenResult"></div>
+    </div>
+    
+    <!-- Step 3: Create Queue -->
+    <div class="section">
+      <h2>Step 3: Create Queue</h2>
+      <label>Client Name:</label>
+      <input type="text" id="clientName" value="TEST CLIENT">
+      
+      <label>Client NIK:</label>
+      <input type="text" id="clientNik" value="1234567890123456">
+      
+      <label>Service ID:</label>
+      <input type="number" id="serviceId" value="1">
+      
+      <label>PK ID:</label>
+      <input type="number" id="pkId" value="40">
+      
+      <button onclick="createQueue()">Create Queue</button>
+      <div id="queueResult"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+    let token = localStorage.getItem('token');
+    let userId = null;
+
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const resultDiv = document.getElementById('loginResult');
+      
+      try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          token = data.token;
+          userId = data.user.id;
+          localStorage.setItem('token', token);
+          
+          resultDiv.className = 'result';
+          resultDiv.textContent = `✅ Login Success!\n\nUser ID: ${data.user.id}\nUsername: ${data.user.username}\nName: ${data.user.name}\nRole: ${data.user.role}\n\nToken: ${token.substring(0, 50)}...`;
+        } else {
+          resultDiv.className = 'result error';
+          resultDiv.textContent = `❌ Login Failed: ${data.message}`;
+        }
+      } catch (error) {
+        resultDiv.className = 'result error';
+        resultDiv.textContent = `❌ Error: ${error.message}`;
+      }
+    }
+
+    function checkToken() {
+      const resultDiv = document.getElementById('tokenResult');
+      
+      if (!token) {
+        resultDiv.className = 'result error';
+        resultDiv.textContent = '❌ No token found. Please login first.';
+        return;
+      }
+      
+      // Decode JWT (simple base64 decode)
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        resultDiv.className = 'result';
+        resultDiv.textContent = `✅ Token Found!\n\n${JSON.stringify(payload, null, 2)}`;
+        userId = payload.id;
+      } catch (error) {
+        resultDiv.className = 'result error';
+        resultDiv.textContent = `❌ Invalid token: ${error.message}`;
+      }
+    }
+
+    async function createQueue() {
+      const resultDiv = document.getElementById('queueResult');
+      
+      if (!token) {
+        resultDiv.className = 'result error';
+        resultDiv.textContent = '❌ Please login first!';
+        return;
+      }
+      
+      if (!userId) {
+        resultDiv.className = 'result error';
+        resultDiv.textContent = '❌ User ID not found. Please check token.';
+        return;
+      }
+      
+      const clientName = document.getElementById('clientName').value;
+      const clientNik = document.getElementById('clientNik').value;
+      const serviceId = document.getElementById('serviceId').value;
+      const pkId = document.getElementById('pkId').value;
+      
+      try {
+        const response = await fetch(`${API_URL}/queue`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            service_id: parseInt(serviceId),
+            client_name: clientName,
+            client_nik: clientNik,
+            pk_id: parseInt(pkId),
+            operator_id: userId  // IMPORTANT: Send operator_id
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          resultDiv.className = 'result';
+          resultDiv.textContent = `✅ Queue Created!\n\n${JSON.stringify(data, null, 2)}`;
+        } else {
+          resultDiv.className = 'result error';
+          resultDiv.textContent = `❌ Failed: ${data.error || JSON.stringify(data)}`;
+        }
+      } catch (error) {
+        resultDiv.className = 'result error';
+        resultDiv.textContent = `❌ Error: ${error.message}`;
+      }
+    }
+
+    // Auto-check token on load
+    window.onload = () => {
+      if (token) {
+        checkToken();
+      }
+    };
+  </script>
+</body>
+</html>

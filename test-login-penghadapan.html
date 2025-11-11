@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login & Penghadapan API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .token-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .response {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .quick-login {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .quick-login h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .quick-login-btn {
+            background: #1976d2;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .endpoint-list {
+            list-style: none;
+        }
+
+        .endpoint-list li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .endpoint-list li:hover {
+            background: #e9ecef;
+        }
+
+        .endpoint-list .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method.get { background: #28a745; color: white; }
+        .method.post { background: #007bff; color: white; }
+        .method.put { background: #ffc107; color: black; }
+        .method.delete { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🔐 Test Login & Penghadapan API</h1>
+            <p>Tool untuk test login dan API Penghadapan</p>
+        </div>
+
+        <!-- Quick Login -->
+        <div class="card">
+            <div class="quick-login">
+                <h3>⚡ Quick Login</h3>
+                <button class="quick-login-btn" onclick="quickLogin('admin', 'admin123')">Admin</button>
+                <button class="quick-login-btn" onclick="quickLogin('petugas_penghadapan', 'petugas123')">Petugas Penghadapan</button>
+                <button class="quick-login-btn" onclick="quickLogin('petugas_kunjungan', 'petugas123')">Petugas Kunjungan</button>
+                <button class="quick-login-btn" onclick="quickLogin('petugas_pengaduan', 'petugas123')">Petugas Pengaduan</button>
+            </div>
+
+            <h2>1. Login</h2>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="username" value="petugas_penghadapan" placeholder="Masukkan username">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="password" value="petugas123" placeholder="Masukkan password">
+            </div>
+            <button onclick="login()">🔐 Login</button>
+
+            <div id="loginResponse"></div>
+        </div>
+
+        <!-- Token Display -->
+        <div class="card" id="tokenCard" style="display: none;">
+            <h2>🎫 Token</h2>
+            <div class="token-display" id="tokenDisplay"></div>
+            <button onclick="copyToken()" style="margin-top: 10px;">📋 Copy Token</button>
+        </div>
+
+        <!-- Penghadapan API -->
+        <div class="card" id="apiCard" style="display: none;">
+            <h2>📋 API Penghadapan</h2>
+
+            <div class="grid">
+                <!-- Get All -->
+                <div>
+                    <h3>Lihat Semua Penghadapan</h3>
+                    <button onclick="getAllPenghadapan()">📋 Get All</button>
+                    <div id="getAllResponse" class="response" style="display: none;"></div>
+                </div>
+
+                <!-- Get My Tasks -->
+                <div>
+                    <h3>Lihat Tugas Saya</h3>
+                    <button onclick="getMyTasks()">📝 My Tasks</button>
+                    <div id="myTasksResponse" class="response" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Create Penghadapan -->
+            <div style="margin-top: 30px;">
+                <h3>Buat Penghadapan Baru</h3>
+                <div class="form-group">
+                    <label>Nama Klien:</label>
+                    <input type="text" id="clientName" value="Andi Wijaya" placeholder="Nama lengkap klien">
+                </div>
+                <div class="form-group">
+                    <label>NIK:</label>
+                    <input type="text" id="clientNik" value="3201010101900001" placeholder="NIK klien">
+                </div>
+                <div class="form-group">
+                    <label>No HP:</label>
+                    <input type="text" id="clientPhone" value="081234567890" placeholder="Nomor HP">
+                </div>
+                <div class="form-group">
+                    <label>Nama Pengadilan:</label>
+                    <input type="text" id="courtName" value="Pengadilan Negeri Bandung" placeholder="Nama pengadilan">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Sidang:</label>
+                    <input type="date" id="hearingDate" value="2025-01-15">
+                </div>
+                <div class="form-group">
+                    <label>Waktu Sidang:</label>
+                    <input type="time" id="hearingTime" value="10:00">
+                </div>
+                <div class="form-group">
+                    <label>Nomor Perkara:</label>
+                    <input type="text" id="caseNumber" value="123/Pid.B/2025/PN.Bdg" placeholder="Nomor perkara">
+                </div>
+                <button onclick="createPenghadapan()">➕ Buat Penghadapan</button>
+                <div id="createResponse" class="response" style="display: none;"></div>
+            </div>
+
+            <!-- Actions -->
+            <div style="margin-top: 30px;">
+                <h3>Aksi Penghadapan</h3>
+                <div class="form-group">
+                    <label>ID Penghadapan:</label>
+                    <input type="number" id="penghadapanId" value="1" placeholder="ID penghadapan">
+                </div>
+                <button onclick="acceptPenghadapan()">✅ Accept</button>
+                <button onclick="completePenghadapan()">✔️ Complete</button>
+                <div id="actionResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Endpoints Reference -->
+        <div class="card">
+            <h2>📚 API Endpoints Reference</h2>
+            <ul class="endpoint-list">
+                <li><span class="method post">POST</span> /api/auth/login - Login</li>
+                <li><span class="method get">GET</span> /api/penghadapan - Get all penghadapan</li>
+                <li><span class="method get">GET</span> /api/penghadapan/my-tasks - Get my tasks</li>
+                <li><span class="method post">POST</span> /api/penghadapan - Create penghadapan</li>
+                <li><span class="method post">POST</span> /api/penghadapan/:id/accept - Accept</li>
+                <li><span class="method post">POST</span> /api/penghadapan/:id/complete - Complete</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let token = localStorage.getItem('token') || '';
+
+        // Load token on page load
+        if (token) {
+            document.getElementById('tokenCard').style.display = 'block';
+            document.getElementById('apiCard').style.display = 'block';
+            document.getElementById('tokenDisplay').textContent = token;
+        }
+
+        function quickLogin(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            login();
+        }
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const responseDiv = document.getElementById('loginResponse');
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    token = data.token;
+                    localStorage.setItem('token', token);
+                    
+                    responseDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Login Berhasil!</strong><br>
+                            User: ${data.user.name}<br>
+                            Role: ${data.user.role}
+                        </div>
+                    `;
+
+                    document.getElementById('tokenCard').style.display = 'block';
+                    document.getElementById('apiCard').style.display = 'block';
+                    document.getElementById('tokenDisplay').textContent = token;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="error">
+                            <strong>❌ Login Gagal!</strong><br>
+                            ${data.error || 'Unknown error'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Error!</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function copyToken() {
+            navigator.clipboard.writeText(token);
+            alert('Token copied to clipboard!');
+        }
+
+        async function getAllPenghadapan() {
+            const responseDiv = document.getElementById('getAllResponse');
+            responseDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(`${API_URL}/penghadapan`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="success">✅ Berhasil! Total: ${data.length}</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="error">❌ Error: ${data.error}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="error">❌ Error: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function getMyTasks() {
+            const responseDiv = document.getElementById('myTasksResponse');
+            responseDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(`${API_URL}/penghadapan/my-tasks`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="success">✅ Berhasil! Total: ${data.length}</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="error">❌ Error: ${data.error}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="error">❌ Error: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function createPenghadapan() {
+            const responseDiv = document.getElementById('createResponse');
+            responseDiv.style.display = 'block';
+
+            const data = {
+                client_name: document.getElementById('clientName').value,
+                client_nik: document.getElementById('clientNik').value,
+                client_phone: document.getElementById('clientPhone').value,
+                court_name: document.getElementById('courtName').value,
+                hearing_date: document.getElementById('hearingDate').value,
+                hearing_time: document.getElementById('hearingTime').value,
+                case_number: document.getElementById('caseNumber').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/penghadapan`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Penghadapan berhasil dibuat!<br>
+                            Nomor: ${result.queue_number}
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="error">❌ Error: ${result.error}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="error">❌ Error: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function acceptPenghadapan() {
+            const id = document.getElementById('penghadapanId').value;
+            const responseDiv = document.getElementById('actionResponse');
+            responseDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(`${API_URL}/penghadapan/${id}/accept`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="success">✅ Penghadapan berhasil di-accept!</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="error">❌ Error: ${data.error}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="error">❌ Error: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function completePenghadapan() {
+            const id = document.getElementById('penghadapanId').value;
+            const responseDiv = document.getElementById('actionResponse');
+            responseDiv.style.display = 'block';
+
+            const notes = prompt('Masukkan catatan:', 'Klien hadir tepat waktu, sidang berjalan lancar');
+
+            try {
+                const response = await fetch(`${API_URL}/penghadapan/${id}/complete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ notes })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="success">✅ Penghadapan berhasil diselesaikan!</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="error">❌ Error: ${data.error}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="error">❌ Error: ${error.message}</div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

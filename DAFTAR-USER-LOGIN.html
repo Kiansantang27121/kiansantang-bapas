@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar User & Password - KIANSANTANG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .role-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .role-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .role-title h2 {
+            color: #667eea;
+            margin-left: 10px;
+        }
+
+        .user-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .user-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .credential-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .credential-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .credential-value {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            color: #333;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+
+        .access-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .access-info h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .access-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .access-list li {
+            padding: 5px 0;
+            color: #555;
+        }
+
+        .access-list li:before {
+            content: "✅ ";
+            margin-right: 8px;
+        }
+
+        .access-list li.no-access:before {
+            content: "❌ ";
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .warning-box ul {
+            color: #856404;
+            margin-left: 20px;
+        }
+
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .quick-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-5px);
+        }
+
+        .quick-link h4 {
+            margin-bottom: 5px;
+        }
+
+        .quick-link p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 DAFTAR USER & PASSWORD</h1>
+            <p>KIANSANTANG - Kios Antrian Santun dan Tanggap | BAPAS Kelas I Bandung</p>
+            <p style="margin-top: 10px; color: #999;">Total Users: 8</p>
+        </div>
+
+        <!-- ADMIN -->
+        <div class="role-section">
+            <div class="role-title">
+                <span style="font-size: 32px;">👑</span>
+                <h2>ADMINISTRATOR</h2>
+            </div>
+            
+            <div class="user-card">
+                <h3>Administrator</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>admin</span>
+                        <button class="copy-btn" onclick="copyText('admin')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>admin123</span>
+                        <button class="copy-btn" onclick="copyText('admin123')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="access-info">
+                    <h4>Akses:</h4>
+                    <ul class="access-list">
+                        <li>Kelola User</li>
+                        <li>Kelola Layanan</li>
+                        <li>Kelola Pengaturan</li>
+                        <li>Kelola Antrian</li>
+                        <li>Lihat Laporan</li>
+                        <li>Kelola PK & Klien</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPERATOR -->
+        <div class="role-section">
+            <div class="role-title">
+                <span style="font-size: 32px;">👥</span>
+                <h2>OPERATOR</h2>
+            </div>
+            
+            <div class="user-card">
+                <h3>Operator Registrasi</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>operator</span>
+                        <button class="copy-btn" onclick="copyText('operator')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>operator123</span>
+                        <button class="copy-btn" onclick="copyText('operator123')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="access-info">
+                    <h4>Akses:</h4>
+                    <ul class="access-list">
+                        <li>Kelola Antrian</li>
+                        <li>Panggil Klien</li>
+                        <li>Layanan Loket</li>
+                        <li class="no-access">Kelola User</li>
+                        <li class="no-access">Kelola Pengaturan</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PETUGAS LAYANAN -->
+        <div class="role-section">
+            <div class="role-title">
+                <span style="font-size: 32px;">🏢</span>
+                <h2>PETUGAS LAYANAN</h2>
+            </div>
+            
+            <div class="user-card">
+                <h3>Petugas Layanan</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>petugas</span>
+                        <button class="copy-btn" onclick="copyText('petugas')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>petugas123</span>
+                        <button class="copy-btn" onclick="copyText('petugas123')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="access-info">
+                    <h4>Akses:</h4>
+                    <ul class="access-list">
+                        <li>Melayani Antrian</li>
+                        <li>Panggil Klien</li>
+                        <li>Update Status Layanan</li>
+                        <li class="no-access">Kelola User</li>
+                        <li class="no-access">Kelola Pengaturan</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PK -->
+        <div class="role-section">
+            <div class="role-title">
+                <span style="font-size: 32px;">👨‍💼</span>
+                <h2>PEMBIMBING KEMASYARAKATAN (PK)</h2>
+            </div>
+            
+            <div class="user-card">
+                <h3>APK (Ahli Pembimbing Kemasyarakatan)</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>apk</span>
+                        <button class="copy-btn" onclick="copyText('apk')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>pk123</span>
+                        <button class="copy-btn" onclick="copyText('pk123')">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-card">
+                <h3>PK Madya</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>pk_madya</span>
+                        <button class="copy-btn" onclick="copyText('pk_madya')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>pk123</span>
+                        <button class="copy-btn" onclick="copyText('pk123')">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-card">
+                <h3>PK Muda</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>pk_muda</span>
+                        <button class="copy-btn" onclick="copyText('pk_muda')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>pk123</span>
+                        <button class="copy-btn" onclick="copyText('pk123')">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-card">
+                <h3>PK Pertama</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>pk_pertama</span>
+                        <button class="copy-btn" onclick="copyText('pk_pertama')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>pk123</span>
+                        <button class="copy-btn" onclick="copyText('pk123')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="access-info">
+                    <h4>Akses (Semua PK):</h4>
+                    <ul class="access-list">
+                        <li>Dashboard PK</li>
+                        <li>Kelola Klien Binaan</li>
+                        <li>Approve/Reject Antrian</li>
+                        <li>Panggil Klien</li>
+                        <li>Lihat Riwayat Klien</li>
+                        <li class="no-access">Kelola User</li>
+                        <li class="no-access">Kelola Pengaturan</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- STRUKTURAL -->
+        <div class="role-section">
+            <div class="role-title">
+                <span style="font-size: 32px;">🎖️</span>
+                <h2>STRUKTURAL</h2>
+            </div>
+            
+            <div class="user-card">
+                <h3>Struktural/Kepala</h3>
+                <div class="credential-row">
+                    <div class="credential-label">Username:</div>
+                    <div class="credential-value">
+                        <span>struktural</span>
+                        <button class="copy-btn" onclick="copyText('struktural')">Copy</button>
+                    </div>
+                </div>
+                <div class="credential-row">
+                    <div class="credential-label">Password:</div>
+                    <div class="credential-value">
+                        <span>struktural123</span>
+                        <button class="copy-btn" onclick="copyText('struktural123')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="access-info">
+                    <h4>Akses:</h4>
+                    <ul class="access-list">
+                        <li>Dashboard Monitoring</li>
+                        <li>Lihat Laporan</li>
+                        <li>Lihat Statistik</li>
+                        <li class="no-access">Kelola User</li>
+                        <li class="no-access">Kelola Antrian</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div class="role-section">
+            <div class="role-title">
+                <span style="font-size: 32px;">🚀</span>
+                <h2>QUICK ACCESS</h2>
+            </div>
+            
+            <div class="quick-access">
+                <a href="http://localhost:5174" class="quick-link" target="_blank">
+                    <h4>Panel Admin</h4>
+                    <p>Port 5174</p>
+                </a>
+                <a href="http://localhost:5176" class="quick-link" target="_blank">
+                    <h4>Aplikasi Petugas</h4>
+                    <p>Port 5176</p>
+                </a>
+                <a href="http://localhost:5173" class="quick-link" target="_blank">
+                    <h4>Pengguna Layanan</h4>
+                    <p>Port 5173</p>
+                </a>
+                <a href="http://localhost:5175" class="quick-link" target="_blank">
+                    <h4>Display</h4>
+                    <p>Port 5175</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="warning-box">
+            <h3>⚠️ PENTING - KEAMANAN</h3>
+            <ul>
+                <li>Password di atas adalah password DEFAULT</li>
+                <li>Segera ubah password setelah login pertama kali</li>
+                <li>Jangan share password ke orang yang tidak berwenang</li>
+                <li>Password di database sudah di-hash untuk keamanan</li>
+                <li>Backup database secara berkala</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Copied: ' + text);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
+</body>
+</html>

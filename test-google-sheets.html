@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Google Sheets Sync</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        h1 {
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Google Sheets Sync - Test Page</h1>
+        
+        <div class="info">
+            <h3>📋 Setup Instructions:</h3>
+            <ol>
+                <li>Create a Google Sheet with columns: <strong>Nama | NIP | Telepon | Jabatan</strong></li>
+                <li>Fill with PK data</li>
+                <li>Click "Share" → "Anyone with the link" → "Viewer"</li>
+                <li>Copy the sheet URL and paste below</li>
+            </ol>
+        </div>
+
+        <h3>Google Sheets URL:</h3>
+        <input 
+            type="text" 
+            id="sheetUrl" 
+            placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit"
+            value=""
+        />
+
+        <button onclick="syncPK()">🔄 Sync PK from Google Sheets</button>
+        <button onclick="getCurrentUrl()">📊 Get Current Sheet URL</button>
+        <button onclick="testPKList()">👥 View All PK</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        async function syncPK() {
+            const sheetUrl = document.getElementById('sheetUrl').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!sheetUrl) {
+                resultDiv.innerHTML = '<p class="error">❌ Please enter Google Sheets URL</p>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<p>⏳ Syncing from Google Sheets...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/google-sheets/sync-pk`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sheetUrl })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 class="success">✅ Sync Successful!</h3>
+                        <p><strong>Message:</strong> ${data.message}</p>
+                        <p><strong>New PK Added:</strong> ${data.synced}</p>
+                        <p><strong>PK Updated:</strong> ${data.updated}</p>
+                        <p><strong>Errors:</strong> ${data.errors}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 class="error">❌ Sync Failed</h3>
+                        <p>${data.error}</p>
+                        <p>${data.details || ''}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 class="error">❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        async function getCurrentUrl() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>⏳ Loading...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/google-sheets/pk-sheet-url`);
+                const data = await response.json();
+                
+                if (data.url) {
+                    document.getElementById('sheetUrl').value = data.url;
+                    resultDiv.innerHTML = `
+                        <h3 class="success">✅ Current Sheet URL:</h3>
+                        <p>${data.url}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = '<p>ℹ️ No Google Sheets URL saved yet</p>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        async function testPKList() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>⏳ Loading PK list...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/pk`);
+                const data = await response.json();
+                
+                let html = '<h3 class="success">✅ PK List:</h3>';
+                html += `<p><strong>Total:</strong> ${data.length} PK</p>`;
+                html += '<table border="1" cellpadding="10" style="width:100%; border-collapse: collapse;">';
+                html += '<tr><th>Nama</th><th>NIP</th><th>Telepon</th><th>Jabatan</th></tr>';
+                
+                data.forEach(pk => {
+                    html += `
+                        <tr>
+                            <td>${pk.name}</td>
+                            <td>${pk.nip || '-'}</td>
+                            <td>${pk.phone || '-'}</td>
+                            <td>${pk.jabatan || '-'}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</table>';
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        // Auto-load current URL on page load
+        window.onload = () => {
+            getCurrentUrl();
+        };
+    </script>
+</body>
+</html>

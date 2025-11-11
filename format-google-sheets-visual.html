@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Format Google Sheets - Visual Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .box {
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid;
+        }
+
+        .box-wrong {
+            background: #fee;
+            border-color: #f44;
+        }
+
+        .box-correct {
+            background: #efe;
+            border-color: #4f4;
+        }
+
+        .box-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .box-wrong .box-title {
+            color: #c00;
+        }
+
+        .box-correct .box-title {
+            color: #0a0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table td {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .highlight strong {
+            color: #856404;
+        }
+
+        .template-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .template-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .checklist li:before {
+            content: "☐ ";
+            font-size: 1.3em;
+            margin-right: 10px;
+            color: #667eea;
+        }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Format Google Sheets yang Benar</h1>
+            <p>Panduan Visual untuk Management PK & Klien</p>
+        </div>
+
+        <div class="content">
+            <!-- Format PK -->
+            <div class="section">
+                <h2 class="section-title">👨‍💼 Format Data PK</h2>
+                
+                <div class="template-box">
+                    <h3>✅ Format yang BENAR:</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Telepon</th>
+                                <th>Jabatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Budi Santoso, S.Sos</td>
+                                <td>198501012010011001</td>
+                                <td>081234567890</td>
+                                <td>Pembimbing Kemasyarakatan Ahli Muda</td>
+                            </tr>
+                            <tr>
+                                <td>Siti Nurhaliza, S.H.</td>
+                                <td>198702022011012002</td>
+                                <td>081234567891</td>
+                                <td>Pembimbing Kemasyarakatan Ahli Madya</td>
+                            </tr>
+                            <tr>
+                                <td>Ahmad Fauzi, S.Psi</td>
+                                <td>198903032012011003</td>
+                                <td>081234567892</td>
+                                <td>Pembimbing Kemasyarakatan Ahli Muda</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="comparison">
+                    <div class="box box-wrong">
+                        <div class="box-title">❌ SALAH</div>
+                        <table>
+                            <tr>
+                                <th>NIP</th>
+                                <th>Nama</th>
+                                <th>Jabatan</th>
+                                <th>Telepon</th>
+                            </tr>
+                        </table>
+                        <p style="margin-top: 10px; color: #c00;">
+                            <strong>Masalah:</strong> Urutan kolom salah!
+                        </p>
+                    </div>
+                    
+                    <div class="box box-correct">
+                        <div class="box-title">✅ BENAR</div>
+                        <table>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Telepon</th>
+                                <th>Jabatan</th>
+                            </tr>
+                        </table>
+                        <p style="margin-top: 10px; color: #0a0;">
+                            <strong>Urutan:</strong> Nama → NIP → Telepon → Jabatan
+                        </p>
+                    </div>
+                </div>
+
+                <div class="comparison">
+                    <div class="box box-wrong">
+                        <div class="box-title">❌ SALAH</div>
+                        <table>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>NIP</th>
+                                <th>Telepon</th>
+                                <th>Jabatan</th>
+                            </tr>
+                        </table>
+                        <p style="margin-top: 10px; color: #c00;">
+                            <strong>Masalah:</strong> Ada kolom tambahan (Email)!
+                        </p>
+                    </div>
+                    
+                    <div class="box box-correct">
+                        <div class="box-title">✅ BENAR</div>
+                        <table>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Telepon</th>
+                                <th>Jabatan</th>
+                            </tr>
+                        </table>
+                        <p style="margin-top: 10px; color: #0a0;">
+                            <strong>Hanya 4 kolom:</strong> Tidak ada kolom tambahan
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Format Klien -->
+            <div class="section">
+                <h2 class="section-title">👥 Format Data Klien</h2>
+                
+                <div class="template-box">
+                    <h3>✅ Format yang BENAR:</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIK</th>
+                                <th>Telepon</th>
+                                <th>Alamat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Andi Wijaya</td>
+                                <td>3201010101900001</td>
+                                <td>081234560001</td>
+                                <td>Jl. Merdeka No. 10, Bandung</td>
+                            </tr>
+                            <tr>
+                                <td>Budi Setiawan</td>
+                                <td>3201010101900002</td>
+                                <td>081234560002</td>
+                                <td>Jl. Asia Afrika No. 20, Bandung</td>
+                            </tr>
+                            <tr>
+                                <td>Citra Dewi</td>
+                                <td>3201010101900003</td>
+                                <td>081234560003</td>
+                                <td>Jl. Braga No. 30, Bandung</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="highlight">
+                    <strong>⚠️ Penting untuk Klien:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Buat <strong>tab terpisah</strong> untuk setiap PK</li>
+                        <li>Nama tab: "Klien - [Nama PK]"</li>
+                        <li>URL harus include <code>gid=</code> (tab ID)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Checklist -->
+            <div class="section">
+                <h2 class="section-title">✅ Checklist Sebelum Sync</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3 style="color: #667eea; margin-bottom: 15px;">Data PK:</h3>
+                        <ul class="checklist">
+                            <li>Header di baris 1</li>
+                            <li>Urutan: Nama | NIP | Telepon | Jabatan</li>
+                            <li>Tidak ada kolom tambahan</li>
+                            <li>Minimal kolom "Nama" terisi</li>
+                            <li>NIP format "Plain text"</li>
+                            <li>Sheet di-share "Anyone with the link"</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 style="color: #667eea; margin-bottom: 15px;">Data Klien:</h3>
+                        <ul class="checklist">
+                            <li>Header di baris 1</li>
+                            <li>Urutan: Nama | NIK | Telepon | Alamat</li>
+                            <li>Tidak ada kolom tambahan</li>
+                            <li>Minimal kolom "Nama" terisi</li>
+                            <li>NIK format "Plain text"</li>
+                            <li>Tab terpisah per PK</li>
+                            <li>URL include gid=</li>
+                            <li>Sheet di-share "Anyone with the link"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template Copy-Paste -->
+            <div class="section">
+                <h2 class="section-title">📋 Template Copy-Paste</h2>
+                
+                <div class="template-box">
+                    <h3>Template Data PK:</h3>
+                    <div class="code-block" id="templatePK">Nama	NIP	Telepon	Jabatan
+Budi Santoso, S.Sos	198501012010011001	081234567890	Pembimbing Kemasyarakatan Ahli Muda
+Siti Nurhaliza, S.H.	198702022011012002	081234567891	Pembimbing Kemasyarakatan Ahli Madya
+Ahmad Fauzi, S.Psi	198903032012011003	081234567892	Pembimbing Kemasyarakatan Ahli Muda</div>
+                    <button class="btn" onclick="copyTemplate('templatePK')">📋 Copy Template PK</button>
+                </div>
+
+                <div class="template-box">
+                    <h3>Template Data Klien:</h3>
+                    <div class="code-block" id="templateKlien">Nama	NIK	Telepon	Alamat
+Andi Wijaya	3201010101900001	081234560001	Jl. Merdeka No. 10, Bandung
+Budi Setiawan	3201010101900002	081234560002	Jl. Asia Afrika No. 20, Bandung
+Citra Dewi	3201010101900003	081234560003	Jl. Braga No. 30, Bandung</div>
+                    <button class="btn" onclick="copyTemplate('templateKlien')">📋 Copy Template Klien</button>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="section">
+                <h2 class="section-title">🔗 Quick Links</h2>
+                <div style="text-align: center;">
+                    <a href="https://sheets.google.com" target="_blank" class="btn">🚀 Buka Google Sheets</a>
+                    <a href="http://localhost:5174" target="_blank" class="btn">👨‍💼 Management PK</a>
+                    <a href="http://localhost:5174/clients" target="_blank" class="btn">👥 Management Klien</a>
+                    <a href="buat-google-sheets.html" class="btn">📖 Panduan Lengkap</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyTemplate(id) {
+            const element = document.getElementById(id);
+            const text = element.textContent;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            alert('✅ Template berhasil di-copy!\n\nSekarang:\n1. Buka Google Sheets\n2. Klik cell A1\n3. Paste (Ctrl+V)');
+        }
+    </script>
+</body>
+</html>

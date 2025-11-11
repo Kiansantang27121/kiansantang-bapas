@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Thermal Printer - KIANSANTANG</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .test-data {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .test-data h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
+    }
+
+    .data-label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .data-value {
+      color: #333;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f8f9fa;
+      color: #333;
+      border: 2px solid #e0e0e0;
+    }
+
+    .btn-secondary:hover {
+      background: #e9ecef;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .btn-info {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .btn-info:hover {
+      background: #138496;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .log {
+      background: #1e1e1e;
+      color: #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 20px;
+    }
+
+    .log-entry {
+      margin-bottom: 5px;
+    }
+
+    .log-success {
+      color: #00ff00;
+    }
+
+    .log-error {
+      color: #ff4444;
+    }
+
+    .log-warning {
+      color: #ffaa00;
+    }
+
+    .log-info {
+      color: #00aaff;
+    }
+
+    .preview {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.4;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .preview-title {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🖨️ Test Thermal Printer</h1>
+    <p class="subtitle">KIANSANTANG - BAPAS Kelas I Bandung</p>
+
+    <div class="test-data">
+      <h3>📋 Data Test Antrian</h3>
+      <div class="data-row">
+        <span class="data-label">Nomor Antrian:</span>
+        <span class="data-value" id="queue-number">B008</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Layanan:</span>
+        <span class="data-value" id="service-name">Bimbingan Wajib Lapor</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Nama Klien:</span>
+        <span class="data-value" id="client-name">Andi Wijaya</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">PK:</span>
+        <span class="data-value" id="pk-name">Budiana (PK Madya)</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Estimasi:</span>
+        <span class="data-value" id="estimated-time">15 menit</span>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="btn-primary" onclick="testUSBPrint()">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Test USB Print
+      </button>
+      
+      <button class="btn-secondary" onclick="testIframePrint()">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Test Iframe Print
+      </button>
+
+      <button class="btn-success" onclick="showPreview()">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        Preview Layout
+      </button>
+
+      <button class="btn-info" onclick="clearLog()">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Clear Log
+      </button>
+    </div>
+
+    <div class="log" id="log">
+      <div class="log-entry log-info">🔍 Ready to test thermal printer...</div>
+      <div class="log-entry log-warning">⚠️ Pastikan printer thermal terhubung via USB</div>
+      <div class="log-entry log-info">💡 Klik "Test USB Print" untuk mulai</div>
+    </div>
+
+    <div id="preview-container"></div>
+  </div>
+
+  <script>
+    const testData = {
+      queue_number: 'B008',
+      service_name: 'Bimbingan Wajib Lapor',
+      client_name: 'Andi Wijaya',
+      pk_name: 'Budiana',
+      pk_jabatan: 'PK Madya',
+      estimated_time: 15,
+      created_at: new Date().toISOString()
+    };
+
+    function log(message, type = 'info') {
+      const logDiv = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry log-${type}`;
+      
+      const timestamp = new Date().toLocaleTimeString('id-ID');
+      const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      };
+      
+      entry.textContent = `[${timestamp}] ${icons[type] || ''} ${message}`;
+      logDiv.appendChild(entry);
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+      log('Log cleared', 'info');
+    }
+
+    async function testUSBPrint() {
+      log('Testing USB print...', 'info');
+      
+      if (!('usb' in navigator)) {
+        log('Web USB API not supported in this browser', 'error');
+        log('Please use Chrome, Edge, or Opera', 'warning');
+        return;
+      }
+
+      try {
+        log('Requesting USB device...', 'info');
+        
+        const device = await navigator.usb.requestDevice({
+          filters: [
+            { vendorId: 0x0416 }, // SEWOO
+            { vendorId: 0x04b8 }, // EPSON
+            { vendorId: 0x0519 }, // Star Micronics
+            { vendorId: 0x154f }, // Xprinter
+            { vendorId: 0x1fc9 }, // Custom
+            { vendorId: 0x0fe6 }, // ICS Advent (RPP02N)
+            { vendorId: 0x20d1 }, // RPP series
+            { vendorId: 0x6868 }, // Generic thermal printer
+            { vendorId: 0x0483 }, // STMicroelectronics
+          ]
+        });
+        
+        log(`Device selected: ${device.productName || 'Unknown'}`, 'success');
+        log('Opening device...', 'info');
+        
+        await device.open();
+        await device.selectConfiguration(1);
+        await device.claimInterface(0);
+        
+        log('Device opened successfully', 'success');
+        log('Generating print data...', 'info');
+        
+        const printData = generateThermalData(testData);
+        const encoder = new TextEncoder();
+        const data = encoder.encode(printData);
+        
+        log(`Sending ${data.length} bytes to printer...`, 'info');
+        
+        await device.transferOut(1, data);
+        
+        log('Print command sent successfully!', 'success');
+        log('Closing device...', 'info');
+        
+        await device.close();
+        
+        log('✅ USB Print completed successfully!', 'success');
+        
+      } catch (error) {
+        log(`USB Print failed: ${error.message}`, 'error');
+        console.error(error);
+      }
+    }
+
+    function testIframePrint() {
+      log('Testing iframe print...', 'info');
+      
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(generateHTMLPrint(testData));
+      doc.close();
+      
+      log('Opening print dialog...', 'info');
+      
+      setTimeout(() => {
+        iframe.contentWindow.print();
+        log('Print dialog opened', 'success');
+        
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+          log('Iframe removed', 'info');
+        }, 1000);
+      }, 500);
+    }
+
+    function showPreview() {
+      log('Showing preview...', 'info');
+      
+      const container = document.getElementById('preview-container');
+      container.innerHTML = `
+        <div class="preview">
+          <div class="preview-title">📄 Preview Tiket Thermal</div>
+          ${generateHTMLPreview(testData)}
+        </div>
+      `;
+      
+      log('Preview displayed', 'success');
+    }
+
+    function generateThermalData(data) {
+      const ESC = '\x1B';
+      const GS = '\x1D';
+      
+      let ticket = '';
+      
+      // Initialize
+      ticket += ESC + '@';
+      
+      // Center align
+      ticket += ESC + 'a' + '1';
+      
+      // Header
+      ticket += GS + '!' + '\x11'; // Double size
+      ticket += ESC + 'E' + '1'; // Bold
+      ticket += 'BAPAS KELAS I BANDUNG\n';
+      ticket += ESC + 'E' + '0'; // Bold off
+      ticket += GS + '!' + '\x00'; // Normal size
+      
+      ticket += ESC + 'E' + '1';
+      ticket += 'KIANSANTANG\n';
+      ticket += ESC + 'E' + '0';
+      
+      ticket += 'Jl. Soekarno Hatta No. 748\n';
+      ticket += '(022) 7534015\n\n';
+      
+      ticket += '================================\n\n';
+      
+      // Queue number (HUGE)
+      ticket += GS + '!' + '\x33';
+      ticket += ESC + 'E' + '1';
+      ticket += data.queue_number + '\n';
+      ticket += ESC + 'E' + '0';
+      ticket += GS + '!' + '\x00';
+      
+      ticket += '\n================================\n\n';
+      
+      // Details (left align)
+      ticket += ESC + 'a' + '0';
+      
+      ticket += ESC + 'E' + '1' + 'LAYANAN:\n' + ESC + 'E' + '0';
+      ticket += data.service_name + '\n\n';
+      
+      ticket += ESC + 'E' + '1' + 'NAMA:\n' + ESC + 'E' + '0';
+      ticket += data.client_name + '\n\n';
+      
+      if (data.pk_name) {
+        ticket += ESC + 'E' + '1' + 'PEMBIMBING KEMASYARAKATAN:\n' + ESC + 'E' + '0';
+        ticket += data.pk_name + '\n';
+        if (data.pk_jabatan) {
+          ticket += `(${data.pk_jabatan})\n`;
+        }
+        ticket += '\n';
+      }
+      
+      if (data.estimated_time) {
+        ticket += `Estimasi: ~${data.estimated_time} menit\n\n`;
+      }
+      
+      ticket += '--------------------------------\n';
+      
+      const now = new Date();
+      ticket += `Tanggal: ${now.toLocaleDateString('id-ID')}\n`;
+      ticket += `Waktu: ${now.toLocaleTimeString('id-ID')} WIB\n`;
+      
+      ticket += '--------------------------------\n\n';
+      
+      // Footer (center)
+      ticket += ESC + 'a' + '1';
+      ticket += 'Mohon menunggu panggilan\n';
+      ticket += 'di ruang tunggu\n\n';
+      ticket += 'Terima kasih atas\n';
+      ticket += 'kunjungan Anda\n\n';
+      
+      ticket += '================================\n\n\n';
+      
+      // Cut paper
+      ticket += GS + 'V' + '\x41' + '\x00';
+      
+      return ticket;
+    }
+
+    function generateHTMLPrint(data) {
+      return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            @page { margin: 0; size: 80mm auto; }
+            body { 
+              margin: 0; 
+              padding: 10mm; 
+              font-family: 'Courier New', monospace;
+              font-size: 12px;
+              line-height: 1.4;
+            }
+            .center { text-align: center; }
+            .bold { font-weight: bold; }
+            .large { font-size: 20px; }
+            .huge { font-size: 48px; }
+            .separator { border-top: 1px dashed #000; margin: 5px 0; }
+          </style>
+        </head>
+        <body>
+          ${generateHTMLPreview(data)}
+        </body>
+        </html>
+      `;
+    }
+
+    function generateHTMLPreview(data) {
+      const now = new Date();
+      return `
+        <div class="center">
+          <div class="bold large">BAPAS KELAS I BANDUNG</div>
+          <div class="bold">KIANSANTANG</div>
+          <div>Jl. Soekarno Hatta No. 748</div>
+          <div>(022) 7534015</div>
+        </div>
+        
+        <div class="separator"></div>
+        
+        <div class="center">
+          <div class="bold huge">${data.queue_number}</div>
+        </div>
+        
+        <div class="separator"></div>
+        
+        <div style="margin-top: 10px;">
+          <div class="bold">LAYANAN:</div>
+          <div>${data.service_name}</div>
+        </div>
+        
+        <div style="margin-top: 10px;">
+          <div class="bold">NAMA:</div>
+          <div>${data.client_name}</div>
+        </div>
+        
+        ${data.pk_name ? `
+          <div style="margin-top: 10px;">
+            <div class="bold">PEMBIMBING KEMASYARAKATAN:</div>
+            <div>${data.pk_name}</div>
+            ${data.pk_jabatan ? `<div>(${data.pk_jabatan})</div>` : ''}
+          </div>
+        ` : ''}
+        
+        ${data.estimated_time ? `
+          <div style="margin-top: 10px;">
+            <div>Estimasi: ~${data.estimated_time} menit</div>
+          </div>
+        ` : ''}
+        
+        <div class="separator"></div>
+        
+        <div style="margin-top: 10px;">
+          <div>Tanggal: ${now.toLocaleDateString('id-ID')}</div>
+          <div>Waktu: ${now.toLocaleTimeString('id-ID')} WIB</div>
+        </div>
+        
+        <div class="separator"></div>
+        
+        <div class="center" style="margin-top: 10px;">
+          <div>Mohon menunggu panggilan</div>
+          <div>di ruang tunggu</div>
+          <div style="margin-top: 10px;">Terima kasih atas</div>
+          <div>kunjungan Anda</div>
+        </div>
+      `;
+    }
+
+    // Auto-show preview on load
+    window.addEventListener('load', () => {
+      setTimeout(showPreview, 500);
+    });
+  </script>
+</body>
+</html>

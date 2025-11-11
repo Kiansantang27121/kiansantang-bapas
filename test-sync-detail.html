@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sync Detail - Debug</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .logs {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 15px;
+        }
+
+        .result {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: block;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Test Sync Detail - Debug</h1>
+            <p>Lihat detail proses sync untuk debug masalah</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>📊 Test Sync PK</h2>
+                <div class="input-group">
+                    <label>Google Sheets URL:</label>
+                    <input type="text" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/YOUR_ID/edit">
+                </div>
+                <button class="btn" onclick="testSync()" id="btnSync">🔄 Test Sync</button>
+                
+                <div id="result" class="result"></div>
+                
+                <div id="stats" style="display: none;">
+                    <h3 style="margin-top: 20px; color: #667eea;">📈 Statistik:</h3>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3 id="statTotal">0</h3>
+                            <p>Total Baris</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="statSynced">0</h3>
+                            <p>Berhasil Sync</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="statUpdated">0</h3>
+                            <p>Di-Update</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="statErrors">0</h3>
+                            <p>Error</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="logs" class="logs" style="display: none;"></div>
+            </div>
+
+            <div class="section">
+                <h2>💡 Tips Debug:</h2>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Cek Terminal Backend:</strong> Lihat logs detail di terminal backend</li>
+                    <li><strong>Baris Kosong:</strong> Hapus semua baris kosong di Google Sheets</li>
+                    <li><strong>Format Konsisten:</strong> Pastikan semua baris punya format yang sama</li>
+                    <li><strong>Kolom Nama:</strong> Pastikan kolom "Nama" terisi di semua baris</li>
+                    <li><strong>Test Bertahap:</strong> Sync 5-10 baris dulu, lalu tambah bertahap</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>📋 Data yang Berhasil Masuk (6 PK):</h2>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background: #667eea; color: white;">
+                            <th style="padding: 10px; text-align: left;">Nama</th>
+                            <th style="padding: 10px; text-align: left;">NIP</th>
+                            <th style="padding: 10px; text-align: left;">Telepon</th>
+                            <th style="padding: 10px; text-align: left;">Jabatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;">Ryan Rizkia</td>
+                            <td style="padding: 10px;">198501012010011001</td>
+                            <td style="padding: 10px;">81234567950</td>
+                            <td style="padding: 10px;">Asisten Pembimbing Kemasyarakatan</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;">Muhamad Anggiansah</td>
+                            <td style="padding: 10px;">198702022011012002</td>
+                            <td style="padding: 10px;">81234567951</td>
+                            <td style="padding: 10px;">Asisten Pembimbing Kemasyarakatan</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;">Rakha Hafiyan</td>
+                            <td style="padding: 10px;">198903032012011003</td>
+                            <td style="padding: 10px;">81234567947</td>
+                            <td style="padding: 10px;">Pembimbing Kemasyarakatan Ahli Pertama</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;">Kania Rafinda</td>
+                            <td style="padding: 10px;">199004042013012004</td>
+                            <td style="padding: 10px;">81234567948</td>
+                            <td style="padding: 10px;">Pembimbing Kemasyarakatan Ahli Pertama</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;">Dina Anggun Wahyuni</td>
+                            <td style="padding: 10px;">199105052014011005</td>
+                            <td style="padding: 10px;">81234567949</td>
+                            <td style="padding: 10px;">Asisten Pembimbing Kemasyarakatan</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;">Budiana</td>
+                            <td style="padding: 10px;">-</td>
+                            <td style="padding: 10px;">-</td>
+                            <td style="padding: 10px;">Pembimbing Kemasyarakatan Ahli Madya</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 15px; color: #666;">
+                    <strong>✅ Data ini sudah benar!</strong> Format sesuai dengan yang diharapkan.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        async function testSync() {
+            const sheetUrl = document.getElementById('sheetUrl').value;
+            const resultEl = document.getElementById('result');
+            const logsEl = document.getElementById('logs');
+            const statsEl = document.getElementById('stats');
+            const btnEl = document.getElementById('btnSync');
+
+            if (!sheetUrl) {
+                resultEl.className = 'result error';
+                resultEl.innerHTML = '❌ Masukkan URL Google Sheets!';
+                return;
+            }
+
+            btnEl.disabled = true;
+            btnEl.textContent = '⏳ Syncing...';
+            resultEl.style.display = 'none';
+            logsEl.style.display = 'block';
+            logsEl.textContent = '⏳ Memulai sync...\n';
+
+            try {
+                const response = await fetch(`${API_URL}/google-sheets/sync-pk`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sheetUrl })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultEl.className = 'result success';
+                    resultEl.innerHTML = `
+                        ✅ <strong>Sync Berhasil!</strong><br>
+                        📊 ${data.synced} PK baru ditambahkan<br>
+                        🔄 ${data.updated} PK diupdate<br>
+                        ${data.errors > 0 ? `⚠️ ${data.errors} error<br>` : ''}
+                        💬 ${data.message}
+                    `;
+
+                    // Show stats
+                    statsEl.style.display = 'block';
+                    document.getElementById('statTotal').textContent = data.synced + data.updated;
+                    document.getElementById('statSynced').textContent = data.synced;
+                    document.getElementById('statUpdated').textContent = data.updated;
+                    document.getElementById('statErrors').textContent = data.errors;
+
+                    logsEl.textContent += '\n✅ Sync selesai!\n';
+                    logsEl.textContent += `\nDetail:\n`;
+                    logsEl.textContent += `- PK baru: ${data.synced}\n`;
+                    logsEl.textContent += `- PK diupdate: ${data.updated}\n`;
+                    logsEl.textContent += `- Error: ${data.errors}\n`;
+                    logsEl.textContent += `\n⚠️ PENTING: Lihat terminal backend untuk detail setiap baris!\n`;
+                    logsEl.textContent += `Terminal akan menampilkan:\n`;
+                    logsEl.textContent += `- Baris mana yang berhasil\n`;
+                    logsEl.textContent += `- Baris mana yang di-skip\n`;
+                    logsEl.textContent += `- Alasan kenapa di-skip\n`;
+                } else {
+                    resultEl.className = 'result error';
+                    resultEl.innerHTML = `❌ <strong>Error:</strong> ${data.error || 'Sync gagal'}`;
+                    logsEl.textContent += `\n❌ Error: ${data.error}\n`;
+                }
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.innerHTML = `❌ <strong>Network Error:</strong> ${error.message}`;
+                logsEl.textContent += `\n❌ Network Error: ${error.message}\n`;
+            } finally {
+                btnEl.disabled = false;
+                btnEl.textContent = '🔄 Test Sync';
+            }
+        }
+    </script>
+</body>
+</html>

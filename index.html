@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIANSANTANG - Kios Antrian Santun dan Tanggap | BAPAS Kelas I Bandung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+        }
+
+        .bg-animation span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .bg-animation span:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .bg-animation span:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .bg-animation span:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .bg-animation span:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .bg-animation span:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .bg-animation span:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .bg-animation span:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 15px 20px 10px 20px;
+            animation: fadeInDown 1s ease;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 3px;
+        }
+
+        .organization {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        /* Running Text */
+        .running-text-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 12px 0;
+            margin: 15px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease 0.2s both;
+            flex-shrink: 0;
+        }
+
+        .running-text-wrapper {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            animation: scroll-left 30s linear infinite;
+        }
+
+        .running-text {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            padding: 0 40px;
+            display: inline-block;
+        }
+
+        .running-text-icon {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0 12px;
+            font-size: 1.1rem;
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .running-text-container:hover .running-text-wrapper {
+            animation-play-state: paused;
+        }
+
+        /* Main Apps Section */
+        .section-title {
+            display: none;
+        }
+
+        .section-subtitle {
+            display: none;
+        }
+
+        /* Apps Grid */
+        .apps-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 0;
+            animation: fadeInUp 1s ease 0.4s both;
+            flex-wrap: nowrap;
+            flex: 1;
+            align-items: center;
+        }
+
+        /* Support Panels Grid */
+        .support-panels {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            animation: fadeInUp 1s ease 0.6s both;
+            flex-wrap: nowrap;
+            flex-shrink: 0;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: visible;
+            max-width: 380px;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Support Panel Card */
+        .support-card {
+            width: 110px;
+            height: 110px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .support-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.1), rgba(100, 116, 139, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .support-card:hover::before {
+            opacity: 1;
+        }
+
+        .support-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .support-card:active {
+            transform: translateY(-6px) scale(1.03);
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-card:nth-child(2)::before { background: var(--gradient-2); }
+
+        .app-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.35);
+        }
+
+        .app-card:hover::before {
+            opacity: 0.03;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            margin: 0 auto 20px auto;
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Support Panel Icon */
+        .support-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: white;
+            color: #64748b;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .support-card:hover .support-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .app-card:nth-child(2) .app-icon {
+            background: var(--gradient-2);
+            box-shadow: 0 15px 40px rgba(240, 147, 251, 0.5);
+        }
+
+        .app-card:hover .app-icon {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+        }
+
+        .app-card:nth-child(2):hover .app-icon {
+            box-shadow: 0 20px 50px rgba(240, 147, 251, 0.6);
+        }
+
+        .app-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 12px;
+            text-align: center;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Support Panel Title */
+        .support-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .app-description {
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            text-align: center;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Support Panel Description - Hidden */
+        .support-description {
+            display: none;
+        }
+
+        .app-features {
+            list-style: none;
+            margin-bottom: 20px;
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 12px;
+        }
+
+        .app-features li {
+            padding: 8px 0;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .app-features li:last-child {
+            border-bottom: none;
+        }
+
+        .app-features li i {
+            color: var(--success);
+            font-size: 1rem;
+            min-width: 18px;
+        }
+
+        /* Support Panel Features - Hidden */
+        .support-features {
+            display: none;
+        }
+
+        .app-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 30px;
+            background: var(--gradient-1);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            width: 100%;
+            cursor: pointer;
+            pointer-events: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Support Panel Button - Hidden */
+        .support-button {
+            display: none;
+        }
+
+        .app-card:nth-child(2) .app-button {
+            background: var(--gradient-2);
+            box-shadow: 0 12px 35px rgba(240, 147, 251, 0.4);
+        }
+
+        .app-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 45px rgba(102, 126, 234, 0.5);
+        }
+
+        .app-card:nth-child(2) .app-button:hover {
+            box-shadow: 0 18px 45px rgba(240, 147, 251, 0.5);
+        }
+
+        .app-status {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Support Panel Badge */
+        .support-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        /* Support Panel Status */
+        .support-status {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Support Panel Description */
+        .support-desc {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Active Support Card */
+        .support-card.active {
+            border: 2px solid #10b981;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+        }
+
+        .support-card.active:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.25);
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-coming {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.9);
+            animation: fadeInUp 1s ease 0.6s both;
+            flex-shrink: 0;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-links a:hover {
+            transform: translateY(-1px);
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            margin: 3px 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1366px) {
+            .app-card {
+                padding: 25px 20px;
+            }
+            
+            .app-features {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .apps-grid {
+                gap: 20px;
+            }
+
+            .app-card {
+                padding: 20px 15px;
+                max-width: 320px;
+            }
+
+            .app-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 2.5rem;
+            }
+
+            .app-title {
+                font-size: 1.5rem;
+            }
+
+            .app-features li {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .container {
+                height: auto;
+                min-height: 100vh;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .apps-grid {
+                flex-wrap: wrap;
+                flex: none;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .support-panels {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Quick Access Bar */
+        .quick-access {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quick-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary);
+        }
+
+        .quick-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+            </div>
+            <h1>KIANSANTANG</h1>
+            <div class="subtitle">Kios Antrian Santun dan Tanggap</div>
+            <div class="organization">
+                <i class="fas fa-building"></i> BAPAS Kelas I Bandung
+            </div>
+        </header>
+
+        <!-- Running Text -->
+        <div class="running-text-container">
+            <div class="running-text-wrapper" id="runningTextWrapper">
+                <span class="running-text" id="runningText1">Selamat datang di KIANSANTANG - Kios Antrian Santun dan Tanggap</span>
+                <i class="fas fa-star running-text-icon"></i>
+                <span class="running-text" id="runningText2">Selamat datang di KIANSANTANG - Kios Antrian Santun dan Tanggap</span>
+                <i class="fas fa-star running-text-icon"></i>
+            </div>
+        </div>
+
+        <!-- Main Applications Section -->
+        <div class="apps-grid">
+            <!-- Registration App -->
+            <div class="app-card">
+                <span class="app-status status-active">✓ Aktif</span>
+                <div class="app-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h2 class="app-title">Pengguna Layanan</h2>
+                <p class="app-description">
+                    Aplikasi untuk pengguna layanan mendaftar antrian dengan mudah dan cepat.
+                </p>
+                <a href="http://localhost:5173" class="app-button" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    Buka Aplikasi
+                </a>
+            </div>
+
+            <!-- Petugas App -->
+            <div class="app-card">
+                <span class="app-status status-active">✓ Aktif</span>
+                <div class="app-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h2 class="app-title">Petugas</h2>
+                <p class="app-description">
+                    Aplikasi untuk Petugas Layanan, PK, dan Struktural dengan 3 dashboard berbeda.
+                </p>
+                <a href="http://localhost:5176" class="app-button" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    Buka Aplikasi
+                </a>
+            </div>
+        </div>
+
+        <!-- Support Panels Section -->
+        <div class="support-panels">
+            <!-- Admin Settings Panel -->
+            <div class="support-card active" onclick="window.open('http://localhost:5174', '_blank')" title="Panel Pengaturan - Khusus Administrator">
+                <span class="support-badge"></span>
+                <span class="support-status">✓ Aktif</span>
+                <div class="support-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3 class="support-title">Admin</h3>
+                <p class="support-desc">Pengaturan Sistem</p>
+            </div>
+
+            <!-- Display Panel -->
+            <div class="support-card active" onclick="window.open('http://localhost:5175', '_blank')" title="Display Antrian - Tampilan Monitor">
+                <span class="support-badge"></span>
+                <span class="support-status">✓ Aktif</span>
+                <div class="support-icon">
+                    <i class="fas fa-tv"></i>
+                </div>
+                <h3 class="support-title">Display</h3>
+                <p class="support-desc">Layar Antrian</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-links">
+                <a href="PANDUAN-LOGIN-LENGKAP.md" target="_blank">
+                    <i class="fas fa-book"></i> Panduan Login
+                </a>
+                <a href="APLIKASI-PETUGAS-MULTI-ROLE.md" target="_blank">
+                    <i class="fas fa-file-alt"></i> Dokumentasi
+                </a>
+                <a href="http://localhost:3000/api/health" target="_blank">
+                    <i class="fas fa-heartbeat"></i> Status API
+                </a>
+                <a href="mailto:bapas.bandung@kemenkumham.go.id">
+                    <i class="fas fa-envelope"></i> Kontak
+                </a>
+            </div>
+            <p>&copy; 2025 KIANSANTANG - BAPAS Kelas I Bandung</p>
+        </footer>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="quick-access">
+        <div class="quick-btn" onclick="window.open('http://localhost:5173', '_blank')" title="Pengguna Layanan">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <div class="quick-btn" onclick="window.open('http://localhost:5176', '_blank')" title="Petugas">
+            <i class="fas fa-users-cog"></i>
+        </div>
+        <div class="quick-btn" onclick="scrollToTop()" title="Ke Atas">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <script>
+        // Check if backend is running
+        async function checkBackend() {
+            try {
+                const response = await fetch('http://localhost:3000/api/health', {
+                    method: 'GET',
+                    cache: 'no-cache'
+                });
+                if (!response.ok) {
+                    throw new Error('Backend not responding');
+                }
+                return true;
+            } catch (error) {
+                console.error('❌ Backend tidak berjalan:', error);
+                return false;
+            }
+        }
+
+        // Load running text from API
+        async function loadRunningText() {
+            try {
+                const response = await fetch('http://localhost:3000/api/settings/running_text');
+                if (response.ok) {
+                    const setting = await response.json();
+                    const text = setting.value || 'Selamat datang di KIANSANTANG - Kios Antrian Santun dan Tanggap';
+                    document.getElementById('runningText1').textContent = text;
+                    document.getElementById('runningText2').textContent = text;
+                    console.log('✅ Running text loaded');
+                }
+            } catch (error) {
+                console.log('Running text not available, using default:', error);
+            }
+        }
+
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Load data on page load
+        window.addEventListener('load', async () => {
+            // Check if backend is running
+            const backendRunning = await checkBackend();
+            
+            if (!backendRunning) {
+                // Show alert and redirect to guide
+                if (confirm('⚠️ Aplikasi belum berjalan!\n\nSilakan jalankan aplikasi terlebih dahulu dengan double-click file:\nstart-all-apps.bat\n\nKlik OK untuk melihat panduan lengkap.')) {
+                    window.location.href = 'CARA-JALANKAN-APLIKASI.html';
+                }
+                return;
+            }
+            
+            // Backend running, load data
+            loadRunningText();
+            
+            // Update running text periodically
+            setInterval(() => {
+                loadRunningText();
+            }, 60000); // Update every 60 seconds
+        });
+
+        // Add hover effects
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.zIndex = '10';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.zIndex = '1';
+            });
+        });
+
+        // Console welcome message
+        console.log('%c🎫 KIANSANTANG ', 'background: #667eea; color: white; font-size: 20px; padding: 10px;');
+        console.log('%cKios Antrian Santun dan Tanggap', 'font-size: 14px; color: #667eea;');
+        console.log('%cBAPAS Kelas I Bandung', 'font-size: 12px; color: #666;');
+        console.log('%c\n📱 4 Aplikasi Tersedia\n👥 70 Pengguna Terdaftar\n⚡ Sistem 24/7 Aktif', 'font-size: 12px; color: #10b981;');
+    </script>
+</body>
+</html>

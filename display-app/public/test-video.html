@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        h1 {
+            color: #06b6d4;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 2px solid #06b6d4;
+            border-radius: 5px;
+            background: #2a2a2a;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            background: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0891b2;
+        }
+        video {
+            width: 100%;
+            max-height: 400px;
+            background: black;
+            border: 2px solid #06b6d4;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .info {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #06b6d4;
+        }
+        .error {
+            background: #7f1d1d;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #dc2626;
+        }
+        .success {
+            background: #064e3b;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #10b981;
+        }
+        code {
+            background: #3a3a3a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Test Video Player</h1>
+    <p>Gunakan halaman ini untuk test apakah video URL bisa dimuat browser.</p>
+
+    <div class="input-group">
+        <label for="videoUrl"><strong>Video URL:</strong></label>
+        <input 
+            type="text" 
+            id="videoUrl" 
+            placeholder="http://localhost:3000/uploads/video_xxxxx.mp4"
+            value="http://localhost:3000/uploads/video_1762576665465.mp4"
+        >
+        <button onclick="loadVideo()">Load Video</button>
+        <button onclick="useTestVideo()">Use Test Video</button>
+    </div>
+
+    <div id="status"></div>
+
+    <video id="videoPlayer" controls autoplay muted loop>
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="info">
+        <h3>📋 Instructions:</h3>
+        <ol>
+            <li>Paste video URL di input box</li>
+            <li>Click "Load Video"</li>
+            <li>Jika video play → URL OK, format OK</li>
+            <li>Jika error → Check console (F12)</li>
+        </ol>
+        <p><strong>Test Video:</strong> Click "Use Test Video" untuk test dengan video yang pasti work</p>
+    </div>
+
+    <div class="info">
+        <h3>✅ Expected Result:</h3>
+        <ul>
+            <li>Video loads dalam 5-10 detik</li>
+            <li>Video plays automatically</li>
+            <li>Video loops</li>
+            <li>No errors in console</li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <h3>❌ Common Issues:</h3>
+        <ul>
+            <li><strong>404 Error:</strong> File tidak ada di server</li>
+            <li><strong>CORS Error:</strong> Backend tidak running</li>
+            <li><strong>Format Error:</strong> Video format tidak didukung</li>
+            <li><strong>Suspended:</strong> Browser tidak bisa decode video</li>
+        </ul>
+    </div>
+
+    <script>
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoUrl = document.getElementById('videoUrl');
+        const statusDiv = document.getElementById('status');
+
+        function showStatus(message, type) {
+            statusDiv.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+
+        function loadVideo() {
+            const url = videoUrl.value.trim();
+            if (!url) {
+                showStatus('❌ Please enter a video URL', 'error');
+                return;
+            }
+
+            showStatus('⏳ Loading video...', 'info');
+            console.log('Loading video:', url);
+
+            videoPlayer.src = url;
+            videoPlayer.load();
+
+            videoPlayer.addEventListener('loadstart', () => {
+                console.log('Video load started');
+            });
+
+            videoPlayer.addEventListener('loadeddata', () => {
+                console.log('Video loaded successfully');
+                showStatus('✅ Video loaded successfully!', 'success');
+            });
+
+            videoPlayer.addEventListener('canplay', () => {
+                console.log('Video can play');
+                showStatus('✅ Video ready to play!', 'success');
+            });
+
+            videoPlayer.addEventListener('error', (e) => {
+                console.error('Video error:', e);
+                const error = videoPlayer.error;
+                let errorMsg = 'Unknown error';
+                
+                if (error) {
+                    switch(error.code) {
+                        case 1:
+                            errorMsg = 'MEDIA_ERR_ABORTED - Video loading aborted';
+                            break;
+                        case 2:
+                            errorMsg = 'MEDIA_ERR_NETWORK - Network error';
+                            break;
+                        case 3:
+                            errorMsg = 'MEDIA_ERR_DECODE - Video decode error';
+                            break;
+                        case 4:
+                            errorMsg = 'MEDIA_ERR_SRC_NOT_SUPPORTED - Video format not supported';
+                            break;
+                    }
+                }
+                
+                showStatus('❌ Error: ' + errorMsg + '<br><br><strong>Solutions:</strong><br>' +
+                    '1. Check video format (should be MP4 H.264)<br>' +
+                    '2. Check backend running (port 3000)<br>' +
+                    '3. Check file exists in uploads folder<br>' +
+                    '4. Try test video button', 'error');
+            });
+
+            videoPlayer.addEventListener('stalled', () => {
+                console.warn('Video stalled');
+                showStatus('⚠️ Video stalled - network issue or slow connection', 'error');
+            });
+
+            videoPlayer.addEventListener('suspend', () => {
+                console.warn('Video suspended');
+                showStatus('⚠️ Video suspended - browser stopped loading<br><br>This usually means:<br>' +
+                    '1. Video format not supported by browser<br>' +
+                    '2. Video codec incompatible<br>' +
+                    '3. File corrupt<br><br>' +
+                    '<strong>Solution:</strong> Convert video to MP4 (H.264)', 'error');
+            });
+        }
+
+        function useTestVideo() {
+            videoUrl.value = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+            loadVideo();
+        }
+
+        // Auto-load on page load if URL is set
+        window.addEventListener('load', () => {
+            if (videoUrl.value) {
+                loadVideo();
+            }
+        });
+    </script>
+</body>
+</html>

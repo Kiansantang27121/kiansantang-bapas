@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizard: Buat Google Sheets BAPAS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        .step h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .template-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .template-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .copy-area {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .checklist {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .checklist h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .checklist ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            font-size: 1.5em;
+            color: #856404;
+        }
+
+        .alert {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #667eea;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧙‍♂️ Wizard: Buat Google Sheets</h1>
+            <p>Panduan Step-by-Step Membuat Google Sheets untuk BAPAS Bandung</p>
+        </div>
+
+        <div class="content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('pk')">📊 Data PK</button>
+                <button class="tab" onclick="showTab('klien')">👥 Data Klien</button>
+            </div>
+
+            <!-- Tab: Data PK -->
+            <div id="tab-pk" class="tab-content active">
+                <div class="step">
+                    <h2><span class="step-number">1</span>Buat Google Sheets Baru</h2>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Buka <a href="https://sheets.google.com" target="_blank" style="color: #667eea; font-weight: bold;">Google Sheets</a></li>
+                        <li>Klik <strong>"+ Blank"</strong> untuk sheet baru</li>
+                        <li>Rename sheet: <span class="highlight">Data PK BAPAS Bandung</span></li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <h2><span class="step-number">2</span>Copy Template Data PK</h2>
+                    
+                    <div class="template-box">
+                        <h3>📋 Template Data PK (Copy ini ke Google Sheets)</h3>
+                        <p><strong>Cara:</strong> Klik tombol "Copy Template" → Paste di cell A1 Google Sheets</p>
+                        
+                        <div class="copy-area" id="template-pk">Nama	NIP	Telepon	Jabatan
+Budi Santoso, S.Sos	198501012010011001	081234567890	Pembimbing Kemasyarakatan Ahli Muda
+Siti Nurhaliza, S.H.	198702022011012002	081234567891	Pembimbing Kemasyarakatan Ahli Madya
+Ahmad Fauzi, S.Psi	198903032012011003	081234567892	Pembimbing Kemasyarakatan Ahli Muda
+Dina Anggun Wahyuni, A.Md.IP	199105052014011005	081234567949	Asisten Pembimbing Kemasyarakatan
+Kania Rafinda, S.Psi	199004042013012004	081234567948	Pembimbing Kemasyarakatan Ahli Pertama</div>
+                        
+                        <button class="btn" onclick="copyTemplate('template-pk')">📋 Copy Template PK</button>
+                        <div id="alert-pk" class="alert">✅ Template berhasil di-copy! Paste di Google Sheets (Ctrl+V)</div>
+                    </div>
+
+                    <div class="template-box">
+                        <h3>📊 Struktur Tabel</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kolom A</th>
+                                    <th>Kolom B</th>
+                                    <th>Kolom C</th>
+                                    <th>Kolom D</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Nama</strong></td>
+                                    <td><strong>NIP</strong></td>
+                                    <td><strong>Telepon</strong></td>
+                                    <td><strong>Jabatan</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Budi Santoso, S.Sos</td>
+                                    <td>198501012010011001</td>
+                                    <td>081234567890</td>
+                                    <td>Pembimbing Kemasyarakatan Ahli Muda</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #666;">... isi 63 PK Anda ...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h2><span class="step-number">3</span>Isi Data 63 PK Anda</h2>
+                    <p style="margin-bottom: 15px;">Lanjutkan mengisi data PK Anda sampai 63 baris.</p>
+                    
+                    <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h4 style="color: #004085; margin-bottom: 10px;">✅ Format yang BENAR:</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li><strong>Nama:</strong> Nama lengkap dengan gelar, contoh: "Budi Santoso, S.Sos"</li>
+                            <li><strong>NIP:</strong> 18 digit angka, contoh: "198501012010011001"</li>
+                            <li><strong>Telepon:</strong> Nomor HP, contoh: "081234567890"</li>
+                            <li><strong>Jabatan:</strong> Jabatan lengkap, contoh: "Pembimbing Kemasyarakatan Ahli Muda"</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: #f8d7da; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h4 style="color: #721c24; margin-bottom: 10px;">❌ JANGAN:</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li>Pisahkan nama dan gelar ke kolom berbeda</li>
+                            <li>Tambah kolom di tengah (Email, Alamat, dll)</li>
+                            <li>Biarkan baris kosong di tengah</li>
+                            <li>Biarkan kolom "Nama" kosong</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h2><span class="step-number">4</span>Share Google Sheets</h2>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Klik tombol <strong>"Share"</strong> di kanan atas</li>
+                        <li>Klik <strong>"Change to anyone with the link"</strong></li>
+                        <li>Set permission: <strong>"Viewer"</strong></li>
+                        <li>Klik <strong>"Copy link"</strong></li>
+                        <li>Simpan link untuk sync ke sistem</li>
+                    </ol>
+                    <p style="margin-top: 15px; padding: 15px; background: #d1ecf1; border-radius: 8px;">
+                        <strong>Link akan seperti:</strong><br>
+                        <code>https://docs.google.com/spreadsheets/d/1ABC...XYZ/edit?usp=sharing</code>
+                    </p>
+                </div>
+
+                <div class="checklist">
+                    <h3>✅ Checklist Sebelum Sync</h3>
+                    <ul>
+                        <li>Header: Nama | NIP | Telepon | Jabatan</li>
+                        <li>Semua 63 baris punya kolom "Nama" terisi</li>
+                        <li>NIP 18 digit (atau kosong)</li>
+                        <li>Tidak ada baris kosong</li>
+                        <li>Sheet di-share "Anyone with the link" → "Viewer"</li>
+                        <li>Link sudah di-copy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab: Data Klien -->
+            <div id="tab-klien" class="tab-content">
+                <div class="step">
+                    <h2><span class="step-number">1</span>Buat Google Sheets untuk Klien</h2>
+                    <p style="margin-bottom: 15px;"><strong>Pilih salah satu:</strong></p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="background: #d4edda; padding: 20px; border-radius: 8px;">
+                            <h4 style="color: #155724;">✅ Option A: Satu Sheet Multi-Tab (RECOMMENDED)</h4>
+                            <ul style="margin: 15px 0 0 20px; line-height: 1.8;">
+                                <li>Buat 1 Google Sheets</li>
+                                <li>Buat tab untuk setiap PK</li>
+                                <li>Mudah dikelola</li>
+                            </ul>
+                        </div>
+                        <div style="background: #fff3cd; padding: 20px; border-radius: 8px;">
+                            <h4 style="color: #856404;">Option B: Sheet Terpisah per PK</h4>
+                            <ul style="margin: 15px 0 0 20px; line-height: 1.8;">
+                                <li>Buat sheet terpisah untuk setiap PK</li>
+                                <li>Lebih banyak file</li>
+                                <li>Lebih sulit dikelola</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h2><span class="step-number">2</span>Copy Template Data Klien</h2>
+                    
+                    <div class="template-box">
+                        <h3>📋 Template Data Klien (Format BARU dengan field lengkap)</h3>
+                        <p><strong>Cara:</strong> Klik tombol "Copy Template" → Paste di cell A1 Google Sheets</p>
+                        
+                        <div class="copy-area" id="template-klien">Nama	NIK	WhatsApp	Alamat	Program	Bekerja	Pekerjaan
+Andi Wijaya	3201010101900001	081234567890	Jl. Merdeka No. 10, Bandung	PB	Ya	Karyawan Toko
+Budi Setiawan	3201010101900002	081234567891	Jl. Sudirman No. 5, Bandung	CB	Tidak	
+Citra Dewi	3201010101900003	081234567892	Jl. Asia Afrika No. 15, Bandung	PB	Ya	Buruh Bangunan
+Dedi Kurniawan	3201010101900004	081234567893	Jl. Ahmad Yani No. 20, Bandung	CMB	Ya	Wiraswasta
+Eka Putri	3201010101900005	081234567894	Jl. Gatot Subroto No. 8, Bandung	Asimilasi	Tidak	</div>
+                        
+                        <button class="btn" onclick="copyTemplate('template-klien')">📋 Copy Template Klien</button>
+                        <div id="alert-klien" class="alert">✅ Template berhasil di-copy! Paste di Google Sheets (Ctrl+V)</div>
+                    </div>
+
+                    <div class="template-box">
+                        <h3>📊 Struktur Tabel Klien</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>NIK</th>
+                                    <th>WhatsApp</th>
+                                    <th>Alamat</th>
+                                    <th>Program</th>
+                                    <th>Bekerja</th>
+                                    <th>Pekerjaan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Andi Wijaya</td>
+                                    <td>3201010101900001</td>
+                                    <td>081234567890</td>
+                                    <td>Jl. Merdeka No. 10</td>
+                                    <td>PB</td>
+                                    <td>Ya</td>
+                                    <td>Karyawan Toko</td>
+                                </tr>
+                                <tr>
+                                    <td>Budi Setiawan</td>
+                                    <td>3201010101900002</td>
+                                    <td>081234567891</td>
+                                    <td>Jl. Sudirman No. 5</td>
+                                    <td>CB</td>
+                                    <td>Tidak</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h4 style="color: #0c5460; margin-bottom: 10px;">📝 Penjelasan Kolom:</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li><strong>Nama:</strong> Nama lengkap klien (WAJIB)</li>
+                            <li><strong>NIK:</strong> 16 digit (opsional)</li>
+                            <li><strong>WhatsApp:</strong> Nomor WA (opsional)</li>
+                            <li><strong>Alamat:</strong> Alamat lengkap (opsional)</li>
+                            <li><strong>Program:</strong> PB/CB/CMB/Asimilasi (WAJIB)</li>
+                            <li><strong>Bekerja:</strong> Ya/Tidak (WAJIB)</li>
+                            <li><strong>Pekerjaan:</strong> Jenis pekerjaan (WAJIB jika Bekerja=Ya)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h2><span class="step-number">3</span>Buat Tab untuk Setiap PK</h2>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Klik <strong>"+"</strong> di bawah untuk tambah sheet baru</li>
+                        <li>Rename sheet: Nama PK (contoh: "Budi Santoso")</li>
+                        <li>Copy header ke setiap sheet</li>
+                        <li>Isi data klien untuk PK tersebut</li>
+                        <li>Ulangi untuk 63 PK</li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <h2><span class="step-number">4</span>Get Link dengan GID</h2>
+                    <p style="margin-bottom: 15px;"><strong>PENTING:</strong> Link harus include <code>#gid=xxx</code> untuk sync klien!</p>
+                    
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Buka tab/sheet yang ingin di-share</li>
+                        <li>Klik kanan pada nama tab</li>
+                        <li>Pilih <strong>"Copy link to this sheet"</strong></li>
+                        <li>Link akan include <code>#gid=123456</code></li>
+                    </ol>
+
+                    <p style="margin-top: 15px; padding: 15px; background: #d1ecf1; border-radius: 8px;">
+                        <strong>Link akan seperti:</strong><br>
+                        <code>https://docs.google.com/spreadsheets/d/1ABC...XYZ/edit#gid=123456</code>
+                    </p>
+                </div>
+
+                <div class="checklist">
+                    <h3>✅ Checklist Sebelum Sync Klien</h3>
+                    <ul>
+                        <li>Header: Nama | NIK | WhatsApp | Alamat | Program | Bekerja | Pekerjaan</li>
+                        <li>Kolom "Nama" terisi semua</li>
+                        <li>Program: PB/CB/CMB/Asimilasi</li>
+                        <li>Bekerja: Ya/Tidak</li>
+                        <li>Pekerjaan terisi jika Bekerja=Ya</li>
+                        <li>Link include #gid=xxx</li>
+                        <li>Sheet di-share "Anyone with the link" → "Viewer"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="step" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left-color: #28a745;">
+                <h2 style="color: #155724;">🚀 Langkah Selanjutnya</h2>
+                <ol style="margin-left: 20px; line-height: 2; font-size: 1.1em;">
+                    <li>Buat Google Sheets sesuai panduan di atas</li>
+                    <li>Share sheet dan copy link</li>
+                    <li>Buka Management PK: <a href="http://localhost:5174/pk" target="_blank" style="color: #155724; font-weight: bold;">http://localhost:5174/pk</a></li>
+                    <li>Paste link dan klik "Sync Now"</li>
+                    <li>Verifikasi 63 PK muncul</li>
+                    <li>Ulangi untuk data klien per PK</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyTemplate(elementId) {
+            const template = document.getElementById(elementId);
+            const text = template.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const alertId = elementId === 'template-pk' ? 'alert-pk' : 'alert-klien';
+                const alert = document.getElementById(alertId);
+                alert.classList.add('show');
+                
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                }, 3000);
+            }).catch(err => {
+                alert('Gagal copy. Silakan copy manual dengan Ctrl+C');
+            });
+        }
+    </script>
+</body>
+</html>

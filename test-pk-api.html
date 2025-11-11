@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test PK API</title>
+</head>
+<body>
+    <h1>Test PK API</h1>
+    <button onclick="testAPI()">Test Fetch PK</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Loading...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/pk');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = '<h2>Success! PK Data:</h2><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                console.log('PK Data:', data);
+            } catch (error) {
+                resultDiv.innerHTML = '<h2 style="color: red;">Error:</h2><pre>' + error.message + '</pre>';
+                console.error('Error:', error);
+            }
+        }
+        
+        // Auto test on load
+        window.onload = () => {
+            testAPI();
+        };
+    </script>
+</body>
+</html>

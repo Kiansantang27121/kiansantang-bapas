@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sync - Fixed CSV Parser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: block;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: block;
+        }
+
+        .result.info {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            color: #0c5460;
+            display: block;
+        }
+
+        .example {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .example h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Test Sync - Fixed CSV Parser</h1>
+            <p>Test Google Sheets Sync dengan Data yang Mengandung Koma</p>
+            <div style="margin-top: 15px;">
+                Backend: <span id="backendStatus" class="status">Checking...</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Example Data -->
+            <div class="example">
+                <h3>📋 Contoh Data yang Sekarang Bisa Di-Sync:</h3>
+                <pre>Nama                     | NIP                | Telepon      | Jabatan
+Budi Santoso, S.Sos      | 198501012010011001 | 081234567890 | Pembimbing Kemasyarakatan Ahli Muda
+Siti Nurhaliza, S.H.     | 198702022011012002 | 081234567891 | Pembimbing Kemasyarakatan Ahli Madya
+Ahmad Fauzi, S.Psi       | 198903032012011003 | 081234567892 | Pembimbing Kemasyarakatan Ahli Muda</pre>
+                <p><strong>✅ Perhatikan:</strong> Nama mengandung koma (S.Sos, S.H., S.Psi) - Sekarang bisa di-handle!</p>
+            </div>
+
+            <!-- Test PK Sync -->
+            <div class="test-section">
+                <h2>👨‍💼 Test Sync PK</h2>
+                <div class="input-group">
+                    <label>Google Sheets URL:</label>
+                    <input type="text" id="pkSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/YOUR_ID/edit">
+                </div>
+                <button class="btn" onclick="testSyncPK()" id="btnSyncPK">🔄 Test Sync PK</button>
+                <div id="pkResult" class="result"></div>
+            </div>
+
+            <!-- Test Client Sync -->
+            <div class="test-section">
+                <h2>👥 Test Sync Klien</h2>
+                <div class="input-group">
+                    <label>PK ID:</label>
+                    <input type="number" id="clientPkId" placeholder="1" value="1">
+                </div>
+                <div class="input-group">
+                    <label>Google Sheets URL (dengan gid):</label>
+                    <input type="text" id="clientSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/YOUR_ID/edit#gid=123">
+                </div>
+                <button class="btn" onclick="testSyncClient()" id="btnSyncClient">🔄 Test Sync Klien</button>
+                <div id="clientResult" class="result"></div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="test-section">
+                <h2>📖 Cara Test:</h2>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li>Buat Google Sheet dengan data yang mengandung koma (contoh: "Budi Santoso, S.Sos")</li>
+                    <li>Share sheet: "Anyone with the link" → "Viewer"</li>
+                    <li>Copy URL sheet</li>
+                    <li>Paste di input di atas</li>
+                    <li>Klik tombol "Test Sync"</li>
+                    <li>Lihat hasilnya</li>
+                </ol>
+            </div>
+
+            <!-- What's Fixed -->
+            <div class="test-section">
+                <h2>✅ Yang Sudah Diperbaiki:</h2>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>CSV Parser:</strong> Sekarang bisa handle data dengan koma dalam quotes</li>
+                    <li><strong>Nama dengan gelar:</strong> "Budi Santoso, S.Sos" → OK</li>
+                    <li><strong>Alamat lengkap:</strong> "Jl. Asia Afrika No. 10, Bandung" → OK</li>
+                    <li><strong>Jabatan panjang:</strong> "Pembimbing Kemasyarakatan Ahli Muda" → OK</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        // Check backend status
+        async function checkBackend() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                
+                const statusEl = document.getElementById('backendStatus');
+                if (data.status === 'ok') {
+                    statusEl.textContent = 'Online ✅';
+                    statusEl.className = 'status online';
+                } else {
+                    statusEl.textContent = 'Offline ❌';
+                    statusEl.className = 'status offline';
+                }
+            } catch (error) {
+                const statusEl = document.getElementById('backendStatus');
+                statusEl.textContent = 'Offline ❌';
+                statusEl.className = 'status offline';
+            }
+        }
+
+        // Test Sync PK
+        async function testSyncPK() {
+            const sheetUrl = document.getElementById('pkSheetUrl').value;
+            const resultEl = document.getElementById('pkResult');
+            const btnEl = document.getElementById('btnSyncPK');
+
+            if (!sheetUrl) {
+                resultEl.className = 'result error';
+                resultEl.innerHTML = '❌ <strong>Error:</strong> Masukkan URL Google Sheets!';
+                return;
+            }
+
+            btnEl.disabled = true;
+            btnEl.textContent = '⏳ Syncing...';
+            resultEl.className = 'result info';
+            resultEl.innerHTML = '⏳ Sedang sync data dari Google Sheets...';
+
+            try {
+                const response = await fetch(`${API_URL}/google-sheets/sync-pk`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sheetUrl })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultEl.className = 'result success';
+                    resultEl.innerHTML = `
+                        ✅ <strong>Sync Berhasil!</strong><br>
+                        📊 ${data.synced} PK baru ditambahkan<br>
+                        🔄 ${data.updated} PK diupdate<br>
+                        ${data.errors > 0 ? `⚠️ ${data.errors} error<br>` : ''}
+                        💬 ${data.message}
+                    `;
+                } else {
+                    resultEl.className = 'result error';
+                    resultEl.innerHTML = `❌ <strong>Error:</strong> ${data.error || 'Sync gagal'}`;
+                }
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.innerHTML = `❌ <strong>Network Error:</strong> ${error.message}<br>Pastikan backend jalan di port 3000`;
+            } finally {
+                btnEl.disabled = false;
+                btnEl.textContent = '🔄 Test Sync PK';
+            }
+        }
+
+        // Test Sync Client
+        async function testSyncClient() {
+            const sheetUrl = document.getElementById('clientSheetUrl').value;
+            const pkId = document.getElementById('clientPkId').value;
+            const resultEl = document.getElementById('clientResult');
+            const btnEl = document.getElementById('btnSyncClient');
+
+            if (!sheetUrl) {
+                resultEl.className = 'result error';
+                resultEl.innerHTML = '❌ <strong>Error:</strong> Masukkan URL Google Sheets!';
+                return;
+            }
+
+            if (!pkId) {
+                resultEl.className = 'result error';
+                resultEl.innerHTML = '❌ <strong>Error:</strong> Masukkan PK ID!';
+                return;
+            }
+
+            btnEl.disabled = true;
+            btnEl.textContent = '⏳ Syncing...';
+            resultEl.className = 'result info';
+            resultEl.innerHTML = '⏳ Sedang sync data klien dari Google Sheets...';
+
+            try {
+                const response = await fetch(`${API_URL}/google-sheets/sync-clients`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sheetUrl, pkId })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultEl.className = 'result success';
+                    resultEl.innerHTML = `
+                        ✅ <strong>Sync Berhasil!</strong><br>
+                        👤 PK: ${data.pkName}<br>
+                        📊 ${data.synced} klien baru ditambahkan<br>
+                        🔄 ${data.updated} klien diupdate<br>
+                        ${data.errors > 0 ? `⚠️ ${data.errors} error<br>` : ''}
+                        💬 ${data.message}
+                    `;
+                } else {
+                    resultEl.className = 'result error';
+                    resultEl.innerHTML = `❌ <strong>Error:</strong> ${data.error || 'Sync gagal'}`;
+                }
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.innerHTML = `❌ <strong>Network Error:</strong> ${error.message}<br>Pastikan backend jalan di port 3000`;
+            } finally {
+                btnEl.disabled = false;
+                btnEl.textContent = '🔄 Test Sync Klien';
+            }
+        }
+
+        // Check backend on load
+        checkBackend();
+        setInterval(checkBackend, 5000); // Check every 5 seconds
+    </script>
+</body>
+</html>

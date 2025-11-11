@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Google Sheets Sync - Clients per PK</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        h1 {
+            color: #333;
+        }
+        .pk-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+        .pk-header {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button.secondary {
+            background: linear-gradient(to right, #f093fb, #f5576c);
+        }
+        button.success {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+        .warning {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge-success {
+            background: #4caf50;
+            color: white;
+        }
+        .badge-warning {
+            background: #ff9800;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👥 Google Sheets Sync - Klien per PK</h1>
+        
+        <div class="info">
+            <h3>📋 Struktur Google Sheets:</h3>
+            <p><strong>Satu file Google Sheets dengan multiple tabs (sheets)</strong></p>
+            <ul>
+                <li><strong>Tab 1:</strong> Klien PK Budi Santoso</li>
+                <li><strong>Tab 2:</strong> Klien PK Siti Nurhaliza</li>
+                <li><strong>Tab 3:</strong> Klien PK Ahmad Fauzi</li>
+                <li>dst...</li>
+            </ul>
+            <p><strong>Format setiap tab:</strong></p>
+            <table style="width: auto; margin: 10px 0;">
+                <tr>
+                    <th>Nama</th>
+                    <th>NIK</th>
+                    <th>Telepon</th>
+                    <th>Alamat</th>
+                </tr>
+                <tr>
+                    <td>Andi Wijaya</td>
+                    <td>3201010101900001</td>
+                    <td>081111111111</td>
+                    <td>Jl. Merdeka No. 1</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Cara Mendapatkan URL dengan GID:</h3>
+            <ol>
+                <li>Buka Google Sheet</li>
+                <li>Klik tab/sheet yang ingin di-sync</li>
+                <li>Copy URL dari browser (akan ada <code>#gid=123456</code>)</li>
+                <li>Paste URL lengkap di bawah</li>
+            </ol>
+            <p><strong>Contoh URL:</strong><br>
+            <code>https://docs.google.com/spreadsheets/d/ABC123/edit#gid=0</code></p>
+        </div>
+
+        <button onclick="loadPKList()" class="success">🔄 Load PK List</button>
+        <button onclick="loadAllPKSheets()" class="secondary">📊 View All PK Sheets</button>
+
+        <div id="pkList"></div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        async function loadPKList() {
+            const pkListDiv = document.getElementById('pkList');
+            pkListDiv.innerHTML = '<p>⏳ Loading PK list...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/pk`);
+                const pkList = await response.json();
+                
+                let html = '<h2>📋 Sync Klien per PK</h2>';
+                
+                for (const pk of pkList) {
+                    // Get saved sheet URL for this PK
+                    const urlResponse = await fetch(`${API_URL}/google-sheets/clients-sheet-url/${pk.id}`);
+                    const urlData = await urlResponse.json();
+                    
+                    html += `
+                        <div class="pk-section">
+                            <div class="pk-header">
+                                <h3>👨‍💼 ${pk.name}</h3>
+                                <p style="margin: 5px 0;">NIP: ${pk.nip || '-'} | Jabatan: ${pk.jabatan || '-'}</p>
+                            </div>
+                            
+                            <label><strong>Google Sheets URL (dengan #gid):</strong></label>
+                            <input 
+                                type="text" 
+                                id="sheetUrl_${pk.id}" 
+                                placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=123456"
+                                value="${urlData.url || ''}"
+                            />
+                            
+                            <button onclick="syncClients(${pk.id}, '${pk.name}')">
+                                🔄 Sync Klien untuk ${pk.name}
+                            </button>
+                            <button onclick="viewClients(${pk.id}, '${pk.name}')" class="secondary">
+                                👥 View Klien ${pk.name}
+                            </button>
+                        </div>
+                    `;
+                }
+                
+                pkListDiv.innerHTML = html;
+            } catch (error) {
+                pkListDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        async function syncClients(pkId, pkName) {
+            const sheetUrl = document.getElementById(`sheetUrl_${pkId}`).value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!sheetUrl) {
+                resultDiv.innerHTML = '<p class="error">❌ Please enter Google Sheets URL with #gid</p>';
+                return;
+            }
+
+            resultDiv.innerHTML = `<p>⏳ Syncing klien untuk ${pkName}...</p>`;
+            
+            try {
+                const response = await fetch(`${API_URL}/google-sheets/sync-clients`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sheetUrl, pkId })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 class="success">✅ Sync Successful!</h3>
+                        <p><strong>PK:</strong> ${data.pkName}</p>
+                        <p><strong>Message:</strong> ${data.message}</p>
+                        <p><strong>New Clients Added:</strong> <span class="badge badge-success">${data.synced}</span></p>
+                        <p><strong>Clients Updated:</strong> <span class="badge badge-warning">${data.updated}</span></p>
+                        <p><strong>Errors:</strong> ${data.errors}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 class="error">❌ Sync Failed</h3>
+                        <p>${data.error}</p>
+                        <p>${data.details || ''}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 class="error">❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        async function viewClients(pkId, pkName) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p>⏳ Loading klien untuk ${pkName}...</p>`;
+            
+            try {
+                const response = await fetch(`${API_URL}/pk/${pkId}/clients`);
+                const clients = await response.json();
+                
+                let html = `<h3 class="success">✅ Klien ${pkName}</h3>`;
+                html += `<p><strong>Total:</strong> ${clients.length} klien</p>`;
+                
+                if (clients.length > 0) {
+                    html += '<table>';
+                    html += '<tr><th>Nama</th><th>NIK</th><th>Telepon</th><th>Alamat</th></tr>';
+                    
+                    clients.forEach(client => {
+                        html += `
+                            <tr>
+                                <td>${client.name}</td>
+                                <td>${client.nik || '-'}</td>
+                                <td>${client.phone || '-'}</td>
+                                <td>${client.address || '-'}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    html += '</table>';
+                } else {
+                    html += '<p>Belum ada klien untuk PK ini.</p>';
+                }
+                
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        async function loadAllPKSheets() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>⏳ Loading all PK sheets...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/google-sheets/all-pk-sheets`);
+                const pkList = await response.json();
+                
+                let html = '<h3 class="success">✅ All PK with Google Sheets</h3>';
+                html += '<table>';
+                html += '<tr><th>PK Name</th><th>Jabatan</th><th>Google Sheets URL</th><th>Status</th></tr>';
+                
+                pkList.forEach(pk => {
+                    const hasSheet = pk.clientsSheetUrl ? '✅ Configured' : '⚠️ Not Set';
+                    const badgeClass = pk.clientsSheetUrl ? 'badge-success' : 'badge-warning';
+                    html += `
+                        <tr>
+                            <td>${pk.name}</td>
+                            <td>${pk.jabatan || '-'}</td>
+                            <td>${pk.clientsSheetUrl ? pk.clientsSheetUrl.substring(0, 50) + '...' : '-'}</td>
+                            <td><span class="badge ${badgeClass}">${hasSheet}</span></td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</table>';
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        // Auto-load PK list on page load
+        window.onload = () => {
+            loadPKList();
+        };
+    </script>
+</body>
+</html>

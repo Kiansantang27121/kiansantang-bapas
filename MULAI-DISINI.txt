@@ -1,0 +1,85 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║         🎫 KIANSANTANG - BAPAS Kelas I Bandung              ║
+║         Kios Antrian Santun dan Tanggap                     ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+📋 CARA MENJALANKAN APLIKASI:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ LANGKAH 1: JALANKAN APLIKASI
+   
+   Double-click file ini:
+   
+   ➜  start-all-apps.bat
+   
+   File ini akan otomatis membuka 5 terminal dan menjalankan:
+   • Backend API (Port 3000)
+   • Pengguna Layanan (Port 5173)
+   • Panel Admin (Port 5174)
+   • Display (Port 5175)
+   • Petugas (Port 5176)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ LANGKAH 2: TUNGGU APLIKASI SIAP
+
+   Tunggu 10-30 detik hingga semua terminal menampilkan:
+   "ready" atau "running"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ LANGKAH 3: BUKA APLIKASI
+
+   Buka file ini di browser:
+   
+   ➜  index.html
+   
+   Atau akses langsung:
+   • http://localhost:5173  (Pengguna Layanan)
+   • http://localhost:5174  (Panel Admin)
+   • http://localhost:5175  (Display)
+   • http://localhost:5176  (Petugas)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ JIKA APLIKASI TIDAK BERJALAN:
+
+   1. Pastikan Node.js sudah terinstall
+      Cek dengan: node --version
+   
+   2. Install dependencies (jika belum):
+      Double-click: INSTALL-ALL.bat
+   
+   3. Lihat panduan lengkap:
+      Buka: CARA-JALANKAN-APLIKASI.html
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOKUMENTASI LENGKAP:
+
+   • CARA-START-APLIKASI.md      - Panduan start aplikasi
+   • KIANSANTANG-GUIDE.md         - Panduan lengkap sistem
+   • TROUBLESHOOTING.md           - Solusi masalah umum
+   • README.md                    - Overview proyek
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 TIPS:
+
+   ✓ Jangan tutup terminal saat aplikasi berjalan
+   ✓ Untuk stop aplikasi: Tekan Ctrl+C di terminal
+   ✓ Gunakan start-all-apps.bat untuk kemudahan
+   ✓ Backend HARUS berjalan dulu sebelum frontend
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🆘 BANTUAN:
+
+   Jika masih ada masalah, hubungi:
+   📧 bapas.bandung@kemenkumham.go.id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Selamat menggunakan KIANSANTANG! 🚀✨

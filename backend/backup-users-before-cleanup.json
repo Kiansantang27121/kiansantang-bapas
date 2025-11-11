@@ -1,0 +1,451 @@
+{
+  "timestamp": "2025-11-09T15:23:11.306Z",
+  "deleted_users": [
+    {
+      "id": 68,
+      "username": "petugas_kunjungan",
+      "name": "Petugas Kunjungan",
+      "role": "operator"
+    },
+    {
+      "id": 69,
+      "username": "petugas_pengaduan",
+      "name": "Petugas Pengaduan",
+      "role": "operator"
+    },
+    {
+      "id": 67,
+      "username": "petugas_penghadapan",
+      "name": "Petugas Penghadapan",
+      "role": "operator"
+    },
+    {
+      "id": 65,
+      "username": "petugas_layanan",
+      "name": "Petugas Layanan",
+      "role": "petugas_layanan"
+    },
+    {
+      "id": 12,
+      "username": "achmadhidayat",
+      "name": "Achmad Hidayat",
+      "role": "pk"
+    },
+    {
+      "id": 9,
+      "username": "adhaniwardianti",
+      "name": "Adhani Wardianti",
+      "role": "pk"
+    },
+    {
+      "id": 15,
+      "username": "adrian",
+      "name": "Adrian",
+      "role": "pk"
+    },
+    {
+      "id": 19,
+      "username": "aguscaturprasetyo",
+      "name": "Agus Catur Prasetyo",
+      "role": "pk"
+    },
+    {
+      "id": 40,
+      "username": "agussutisna",
+      "name": "Agus Sutisna",
+      "role": "pk"
+    },
+    {
+      "id": 39,
+      "username": "agustiankusmana",
+      "name": "Agustian Kusmana",
+      "role": "pk"
+    },
+    {
+      "id": 62,
+      "username": "albhiaprilyanto",
+      "name": "Albhi Aprilyanto",
+      "role": "pk"
+    },
+    {
+      "id": 56,
+      "username": "andianiapriliani",
+      "name": "Andiani Apriliani",
+      "role": "pk"
+    },
+    {
+      "id": 53,
+      "username": "anggapermanaputra",
+      "name": "Angga Permana Putra",
+      "role": "pk"
+    },
+    {
+      "id": 48,
+      "username": "anindyadwimaysita",
+      "name": "Anindya Dwi Maysita",
+      "role": "pk"
+    },
+    {
+      "id": 37,
+      "username": "anisanuraisah",
+      "name": "Anisa Nur Aisah",
+      "role": "pk"
+    },
+    {
+      "id": 35,
+      "username": "ariewiryawansupriadi",
+      "name": "Arie Wiryawan Supriadi",
+      "role": "pk"
+    },
+    {
+      "id": 36,
+      "username": "arinifitriahidayati",
+      "name": "Arini Fitria Hidayati",
+      "role": "pk"
+    },
+    {
+      "id": 13,
+      "username": "atiekawati",
+      "name": "Ati Ekawati",
+      "role": "pk"
+    },
+    {
+      "id": 59,
+      "username": "azkamillatina",
+      "name": "Azka Millatina",
+      "role": "pk"
+    },
+    {
+      "id": 33,
+      "username": "baniassariadi",
+      "name": "Banias Sariadi",
+      "role": "pk"
+    },
+    {
+      "id": 47,
+      "username": "bayuindraprasetya",
+      "name": "Bayu Indra Prasetya",
+      "role": "pk"
+    },
+    {
+      "id": 60,
+      "username": "bellaayuwidiyaningru",
+      "name": "Bella Ayu Widiyaningrum",
+      "role": "pk"
+    },
+    {
+      "id": 61,
+      "username": "bintanurizzatie",
+      "name": "Binta Nur 'Izzatie",
+      "role": "pk"
+    },
+    {
+      "id": 2,
+      "username": "budiana",
+      "name": "Budiana",
+      "role": "pk"
+    },
+    {
+      "id": 28,
+      "username": "budipamungkas",
+      "name": "Budi Pamungkas",
+      "role": "pk"
+    },
+    {
+      "id": 32,
+      "username": "cahyobudisantoso",
+      "name": "Cahyo Budisantoso",
+      "role": "pk"
+    },
+    {
+      "id": 51,
+      "username": "claudiamariaelmonia",
+      "name": "Claudia Maria Elmonia",
+      "role": "pk"
+    },
+    {
+      "id": 7,
+      "username": "dinaanggunwahyuni",
+      "name": "Dina Anggun Wahyuni",
+      "role": "pk"
+    },
+    {
+      "id": 45,
+      "username": "dufriandreas",
+      "name": "Dufri Andreas",
+      "role": "pk"
+    },
+    {
+      "id": 17,
+      "username": "efisitifatonah",
+      "name": "Efi siti Fatonah",
+      "role": "pk"
+    },
+    {
+      "id": 57,
+      "username": "eggygilangperdana",
+      "name": "Eggy Gilang Perdana",
+      "role": "pk"
+    },
+    {
+      "id": 43,
+      "username": "fadhilalaraswaty",
+      "name": "Fadhila Laraswaty",
+      "role": "pk"
+    },
+    {
+      "id": 38,
+      "username": "fajarmaulaninurrahma",
+      "name": "Fajar Maulani Nurrahman",
+      "role": "pk"
+    },
+    {
+      "id": 44,
+      "username": "feisalmakarim",
+      "name": "Feisal Makarim",
+      "role": "pk"
+    },
+    {
+      "id": 49,
+      "username": "geryssarestapanembra",
+      "name": "Geryssa Resta Panembrama",
+      "role": "pk"
+    },
+    {
+      "id": 63,
+      "username": "gracetresyademaksibu",
+      "name": "Grace Tresya Demak Sibuea",
+      "role": "pk"
+    },
+    {
+      "id": 34,
+      "username": "hadianramadhany",
+      "name": "Hadian Ramadhany",
+      "role": "pk"
+    },
+    {
+      "id": 30,
+      "username": "hadifirdausamd",
+      "name": "Hadi Firdaus A.Md",
+      "role": "pk"
+    },
+    {
+      "id": 10,
+      "username": "hariterbitmatahari",
+      "name": "Hari Terbit Matahari",
+      "role": "pk"
+    },
+    {
+      "id": 58,
+      "username": "henrieernawan",
+      "name": "Henrie Ernawan",
+      "role": "pk"
+    },
+    {
+      "id": 42,
+      "username": "irawankurniawan",
+      "name": "Irawan Kurniawan",
+      "role": "pk"
+    },
+    {
+      "id": 29,
+      "username": "isepsaefulmillah",
+      "name": "Isep Saeful Millah",
+      "role": "pk"
+    },
+    {
+      "id": 8,
+      "username": "iyusyusuf",
+      "name": "Iyus Yusuf",
+      "role": "pk"
+    },
+    {
+      "id": 41,
+      "username": "jovitapujianisafitri",
+      "name": "Jovita Pujiani Safitri",
+      "role": "pk"
+    },
+    {
+      "id": 6,
+      "username": "kaniarafinda",
+      "name": "Kania Rafinda",
+      "role": "pk"
+    },
+    {
+      "id": 23,
+      "username": "lizameiliza",
+      "name": "Liza Meiliza",
+      "role": "pk"
+    },
+    {
+      "id": 64,
+      "username": "lukmanmahardwikartik",
+      "name": "Lukman Mahar Dwikartika",
+      "role": "pk"
+    },
+    {
+      "id": 11,
+      "username": "mahyudi",
+      "name": "Mahyudi",
+      "role": "pk"
+    },
+    {
+      "id": 27,
+      "username": "marettamugiasajati",
+      "name": "Maretta Mugia Sajati",
+      "role": "pk"
+    },
+    {
+      "id": 22,
+      "username": "misrun",
+      "name": "Misrun",
+      "role": "pk"
+    },
+    {
+      "id": 4,
+      "username": "muhamadanggiansah",
+      "name": "Muhamad Anggiansah",
+      "role": "pk"
+    },
+    {
+      "id": 54,
+      "username": "muhammadasrilzalmita",
+      "name": "Muhammad Asril Zalmi Tanjung",
+      "role": "pk"
+    },
+    {
+      "id": 20,
+      "username": "nurjaman",
+      "name": "Nurjaman",
+      "role": "pk"
+    },
+    {
+      "id": 46,
+      "username": "nurjihanhabiba",
+      "name": "Nurjihan Habiba",
+      "role": "pk"
+    },
+    {
+      "id": 66,
+      "username": "petugas_pk",
+      "name": "Petugas PK",
+      "role": "pk"
+    },
+    {
+      "id": 5,
+      "username": "rakhahafiyan",
+      "name": "Rakha Hafiyan",
+      "role": "pk"
+    },
+    {
+      "id": 52,
+      "username": "riadjusnita",
+      "name": "Ria Djusnita",
+      "role": "pk"
+    },
+    {
+      "id": 16,
+      "username": "rimakhuriatulrahmati",
+      "name": "Rima Khuriatul Rahmatilah",
+      "role": "pk"
+    },
+    {
+      "id": 18,
+      "username": "riyadi",
+      "name": "Riyadi",
+      "role": "pk"
+    },
+    {
+      "id": 3,
+      "username": "ryanrizkia",
+      "name": "Ryan Rizkia",
+      "role": "pk"
+    },
+    {
+      "id": 50,
+      "username": "satriaekapurwantoro",
+      "name": "Satria Eka Purwantoro",
+      "role": "pk"
+    },
+    {
+      "id": 24,
+      "username": "srirahayu",
+      "name": "Sri Rahayu",
+      "role": "pk"
+    },
+    {
+      "id": 31,
+      "username": "srisopianira",
+      "name": "Sri Sopianira",
+      "role": "pk"
+    },
+    {
+      "id": 26,
+      "username": "suparman",
+      "name": "Suparman",
+      "role": "pk"
+    },
+    {
+      "id": 25,
+      "username": "triprasetiyo",
+      "name": "Tri Prasetiyo",
+      "role": "pk"
+    },
+    {
+      "id": 14,
+      "username": "uankurniawann",
+      "name": "Uan Kurniawan N",
+      "role": "pk"
+    },
+    {
+      "id": 21,
+      "username": "watiandriyani",
+      "name": "Wati Andriyani",
+      "role": "pk"
+    },
+    {
+      "id": 55,
+      "username": "wulanpurnamasari",
+      "name": "Wulan Purnama Sari",
+      "role": "pk"
+    }
+  ],
+  "kept_users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "name": "Administrator",
+      "role": "admin"
+    },
+    {
+      "id": 76,
+      "username": "apk",
+      "name": "APK (Shared)",
+      "role": "pk"
+    },
+    {
+      "id": 73,
+      "username": "pk_madya",
+      "name": "PK Madya (Shared)",
+      "role": "pk"
+    },
+    {
+      "id": 74,
+      "username": "pk_muda",
+      "name": "PK Muda (Shared)",
+      "role": "pk"
+    },
+    {
+      "id": 75,
+      "username": "pk_pertama",
+      "name": "PK Pertama (Shared)",
+      "role": "pk"
+    },
+    {
+      "id": 71,
+      "username": "struktural",
+      "name": "Struktural",
+      "role": "struktural"
+    }
+  ]
+}

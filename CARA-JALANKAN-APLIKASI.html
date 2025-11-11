@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cara Menjalankan Aplikasi KIANSANTANG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            max-width: 800px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        h1 {
+            color: #1e293b;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+
+        .alert {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .alert-icon {
+            color: #f59e0b;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .alert-text {
+            color: #92400e;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .steps {
+            margin: 30px 0;
+        }
+
+        .step {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .step-desc {
+            color: #64748b;
+            line-height: 1.6;
+            margin-left: 55px;
+        }
+
+        .code-box {
+            background: #1e293b;
+            color: #10b981;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            margin: 10px 0 10px 55px;
+            overflow-x: auto;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 18px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .info-box-title {
+            color: #1e40af;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box-text {
+            color: #1e40af;
+            line-height: 1.6;
+        }
+
+        .urls {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .url-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .url-item:last-child {
+            border-bottom: none;
+        }
+
+        .url-label {
+            font-weight: 600;
+            color: #475569;
+            min-width: 180px;
+        }
+
+        .url-link {
+            color: #667eea;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+        }
+
+        .url-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-ticket-alt"></i>
+            </div>
+            <h1>KIANSANTANG</h1>
+            <div class="subtitle">Cara Menjalankan Aplikasi</div>
+        </div>
+
+        <div class="alert">
+            <i class="fas fa-exclamation-triangle alert-icon"></i>
+            <span class="alert-text">Aplikasi belum berjalan! Silakan jalankan terlebih dahulu.</span>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    Jalankan Semua Aplikasi (MUDAH)
+                </div>
+                <div class="step-desc">
+                    Double-click file berikut untuk menjalankan semua aplikasi sekaligus:
+                </div>
+                <div class="code-box">
+                    start-all-apps.bat
+                </div>
+                <div class="step-desc">
+                    File ini akan otomatis membuka 5 terminal dan menjalankan semua aplikasi.
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    Tunggu Aplikasi Siap
+                </div>
+                <div class="step-desc">
+                    Tunggu hingga semua terminal menampilkan pesan "ready" atau "running". Biasanya membutuhkan waktu 10-30 detik.
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    Buka Aplikasi
+                </div>
+                <div class="step-desc">
+                    Setelah semua aplikasi berjalan, buka <strong>index.html</strong> di browser atau klik tombol di bawah.
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-box-title">
+                <i class="fas fa-info-circle"></i>
+                Cara Manual (Jika Otomatis Gagal)
+            </div>
+            <div class="info-box-text">
+                Jika <code>start-all-apps.bat</code> tidak bekerja, jalankan manual satu per satu:
+                <ol style="margin-top: 10px; margin-left: 20px;">
+                    <li>Buka terminal, jalankan: <code>cd backend && npm run dev</code></li>
+                    <li>Buka terminal baru, jalankan: <code>cd registration-app && npm run dev</code></li>
+                    <li>Buka terminal baru, jalankan: <code>cd operator-app && npm run dev</code></li>
+                    <li>Buka terminal baru, jalankan: <code>cd display-app && npm run dev</code></li>
+                    <li>Buka terminal baru, jalankan: <code>cd petugas-app && npm run dev</code></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="urls">
+            <h3 style="margin-bottom: 15px; color: #1e293b;">📱 URL Aplikasi:</h3>
+            <div class="url-item">
+                <div class="url-label">🏠 Home Dashboard:</div>
+                <a href="index.html" class="url-link">index.html</a>
+            </div>
+            <div class="url-item">
+                <div class="url-label">🔌 Backend API:</div>
+                <a href="http://localhost:3000/api/health" class="url-link" target="_blank">http://localhost:3000</a>
+            </div>
+            <div class="url-item">
+                <div class="url-label">👥 Pengguna Layanan:</div>
+                <a href="http://localhost:5173" class="url-link" target="_blank">http://localhost:5173</a>
+            </div>
+            <div class="url-item">
+                <div class="url-label">⚙️ Panel Admin:</div>
+                <a href="http://localhost:5174" class="url-link" target="_blank">http://localhost:5174</a>
+            </div>
+            <div class="url-item">
+                <div class="url-label">📺 Display:</div>
+                <a href="http://localhost:5175" class="url-link" target="_blank">http://localhost:5175</a>
+            </div>
+            <div class="url-item">
+                <div class="url-label">👨‍💼 Petugas:</div>
+                <a href="http://localhost:5176" class="url-link" target="_blank">http://localhost:5176</a>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <a href="index.html" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                Buka Home Dashboard
+            </a>
+            <a href="CARA-START-APLIKASI.md" class="btn btn-secondary" target="_blank">
+                <i class="fas fa-book"></i>
+                Panduan Lengkap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Check if backend is running
+        async function checkBackend() {
+            try {
+                const response = await fetch('http://localhost:3000/api/health');
+                if (response.ok) {
+                    // Backend running, redirect to index.html
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                // Backend not running, stay on this page
+                console.log('Backend not running yet');
+            }
+        }
+
+        // Check every 3 seconds
+        setInterval(checkBackend, 3000);
+    </script>
+</body>
+</html>
