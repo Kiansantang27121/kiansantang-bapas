@@ -534,9 +534,10 @@ router.post('/pk-enter-room', authenticateToken, requireRole(['pk']), (req, res)
   try {
     // Get queue with PK info
     const queue = db.prepare(`
-      SELECT q.*, p.jabatan as pk_jabatan
+      SELECT q.*, p.jabatan as pk_jabatan, p.name as pk_name, s.name as service_name
       FROM queue q
       LEFT JOIN pk p ON q.pk_id = p.id
+      LEFT JOIN services s ON q.service_id = s.id
       WHERE q.id = ?
     `).get(queue_id);
     
@@ -556,24 +557,51 @@ router.post('/pk-enter-room', authenticateToken, requireRole(['pk']), (req, res)
       return res.status(403).json({ success: false, message: 'Queue not assigned to your jabatan' });
     }
 
-    // Update pk_entered_at
-    db.prepare('UPDATE queue SET pk_entered_at = CURRENT_TIMESTAMP WHERE id = ?').run(queue_id);
+    // Update pk_entered_at AND auto-call client
+    db.prepare(`
+      UPDATE queue 
+      SET pk_entered_at = CURRENT_TIMESTAMP, 
+          client_called_at = CURRENT_TIMESTAMP,
+          status = 'called'
+      WHERE id = ?
+    `).run(queue_id);
 
     console.log(`✅ PK entered room ${queue.room_number} for queue ${queue.queue_number}`);
+    console.log(`📢 Auto-calling client ${queue.client_name} to room ${queue.room_number}`);
 
-    // Emit socket event for display
     const io = req.app.get('io');
+    
+    // Emit PK entered event
     if (io) {
       io.emit('pk:entered', {
         queue_number: queue.queue_number,
-        room_number: queue.room_number
+        room_number: queue.room_number,
+        pk_name: queue.pk_name
+      });
+      
+      // Auto-emit client call event
+      io.emit('client:called', {
+        type: 'client',
+        queue_number: queue.queue_number,
+        client_name: queue.client_name,
+        room_number: queue.room_number,
+        pk_name: queue.pk_name,
+        auto_called: true
       });
     }
 
     res.json({ 
       success: true, 
-      message: 'PK entered room successfully',
-      room_number: queue.room_number
+      message: 'PK entered room and client auto-called successfully',
+      room_number: queue.room_number,
+      call_data: {
+        type: 'client',
+        queue_number: queue.queue_number,
+        client_name: queue.client_name,
+        room_number: queue.room_number,
+        pk_name: queue.pk_name,
+        auto_called: true
+      }
     });
   } catch (error) {
     console.error('Error confirming PK entry:', error);
@@ -831,18 +859,19 @@ router.get('/activities', (req, res) => {
     
     res.json({ success: true, activities: activities.slice(0, 20) });
   } catch (error) {
-    console.error('Error fetching activities:', error);
-    res.status(500).json({ success: false, message: 'Error fetching activities' });
+    console.error('Error fetching PK entered queues:', error);
+    res.status(500).json({ success: false, message: 'Error fetching queues', error: error.message });
   }
 });
 
 // Get workflow stats for display
-router.get('/stats', (req, res) => {
+router.get('/stats', authenticateToken, requireRole(['admin', 'petugas_layanan', 'operator', 'pk']), (req, res) => {
   try {
     const waiting = db.prepare(`
       SELECT COUNT(*) as count FROM queue q
       JOIN services s ON q.service_id = s.id
       WHERE q.status = 'waiting'
+      AND q.pk_entered_at IS NULL
       AND s.name LIKE '%Bimbingan Wajib Lapor%'
       AND DATE(q.created_at) = DATE('now')
     `).get();
@@ -852,6 +881,16 @@ router.get('/stats', (req, res) => {
       JOIN services s ON q.service_id = s.id
       WHERE q.pk_called_at IS NOT NULL
       AND q.pk_entered_at IS NULL
+      AND s.name LIKE '%Bimbingan Wajib Lapor%'
+      AND DATE(q.created_at) = DATE('now')
+    `).get();
+    
+    const pkEntered = db.prepare(`
+      SELECT COUNT(*) as count FROM queue q
+      JOIN services s ON q.service_id = s.id
+      WHERE q.pk_entered_at IS NOT NULL
+      AND q.client_called_at IS NULL
+      AND q.completed_at IS NULL
       AND s.name LIKE '%Bimbingan Wajib Lapor%'
       AND DATE(q.created_at) = DATE('now')
     `).get();
@@ -878,6 +917,7 @@ router.get('/stats', (req, res) => {
       stats: {
         waiting: waiting.count || 0,
         pkCalled: pkCalled.count || 0,
+        pkEntered: pkEntered.count || 0,
         clientCalled: clientCalled.count || 0,
         completed: completed.count || 0
       }

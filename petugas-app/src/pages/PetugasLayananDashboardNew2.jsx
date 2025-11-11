@@ -35,27 +35,24 @@ export default function PetugasLayananDashboardNew2() {
 
       const headers = { Authorization: `Bearer ${token}` }
 
-      // Fetch services, queues, and rooms
-      const [servicesRes, queuesRes, roomsRes] = await Promise.all([
+      // Fetch services, pending queues, PK entered queues, and rooms
+      const [servicesRes, queuesRes, pkEnteredRes, roomsRes] = await Promise.all([
         axios.get(`${API_URL}/services`).catch(e => ({ data: [] })),
         axios.get(`${API_URL}/workflow/pending-queues`, { headers }).catch(e => ({ data: { queues: [] } })),
+        axios.get(`${API_URL}/workflow/pk-entered-queues`, { headers }).catch(e => ({ data: { queues: [] } })),
         axios.get(`${API_URL}/workflow/available-rooms`, { headers }).catch(e => ({ data: { rooms: [] } }))
       ])
 
       setServices(servicesRes.data)
       setRooms(roomsRes.data.rooms || [])
 
-      const allQueues = queuesRes.data.queues || []
-      
-      // Separate queues: ready to call client (PK sudah masuk) vs pending
-      const readyQueues = allQueues.filter(q => q.pk_entered_at && !q.client_called_at)
-      const pendingQueues = allQueues.filter(q => !q.pk_entered_at || q.client_called_at)
-      
-      setReadyToCallClient(readyQueues)
+      // PK entered queues (client auto-called)
+      setReadyToCallClient(pkEnteredRes.data.queues || [])
 
       // Group pending queues by service
+      const allQueues = queuesRes.data.queues || []
       const grouped = {}
-      pendingQueues.forEach(queue => {
+      allQueues.forEach(queue => {
         const serviceId = queue.service_id
         if (!grouped[serviceId]) {
           grouped[serviceId] = []
